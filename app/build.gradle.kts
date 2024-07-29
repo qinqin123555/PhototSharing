@@ -33,6 +33,8 @@ android {
 
 dependencies {
 
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.google.code.gson:gson:2.9.1")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
