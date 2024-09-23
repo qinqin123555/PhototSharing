@@ -9,5 +9,6 @@
     <color name="login_input">#F2F2F2</color>
     <color name="status_gray">#C4C4C4</color>
     <color name="sex_gray">#80F1F1F1</color>
+    <color name="gray">#F0F0F0</color>
 
 </resources>

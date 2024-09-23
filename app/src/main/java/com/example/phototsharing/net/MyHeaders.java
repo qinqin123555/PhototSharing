@@ -4,10 +4,29 @@ import okhttp3.Headers;
 
 public class MyHeaders {
 
-    //存储应用程序的身份验证信息
-    private static String appId = "3422019bba8a4c0c89be9d4f64c96279";
+    public static String getAppId() {
+        return appId;
+    }
 
-    private static String appSecret = "853732836741dcee74506bd3895571eee4558";
+    public static void setAppId(String appId) {
+        MyHeaders.appId = appId;
+    }
+
+    public static String getAppSecret() {
+        return appSecret;
+    }
+
+    public static void setAppSecret(String appSecret) {
+        MyHeaders.appSecret = appSecret;
+    }
+
+    //存储应用程序的身份验证信息
+    private static String appId = "d476c883bdfa414da055958253e84990";
+
+    private static String appSecret = "0204938b35c74ba7443e58d74cb99856eb8e5";
+
+
+
 
 
     //公共的静态方法 getHeaders()，用于获取请求头信息。使用 Headers.Builder 创建一个新的请求头对象，并添加多个头字段

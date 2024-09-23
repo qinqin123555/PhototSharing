@@ -51,8 +51,8 @@ public enum URLS {
 
     SAVE("/share/save");
 
-    static final String Base = "http://47.107.52.7:88/member/photo";
-
+  //  static final String Base = "http://47.107.52.7:88/member/photo";
+    static final String Base = "https://api-store.openguet.cn/api/member/photo";
     private final String url;
 
 
