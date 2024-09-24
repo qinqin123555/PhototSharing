@@ -1,12 +1,19 @@
 package com.example.phototsharing;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.Editable;
+import android.text.InputType;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,12 +24,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.alibaba.fastjson.JSON;
 import com.example.phototsharing.entity.PersonBean;
+import com.example.phototsharing.net.Code;
 import com.example.phototsharing.net.MyHeaders;
 import com.example.phototsharing.net.MyRequest;
 import com.example.phototsharing.net.URLS;
@@ -53,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Handler handler;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,11 +159,31 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                PersonBean personBean = (PersonBean) msg.obj;
+
+                if (personBean.getCode() == Code.SUCCESS) {
+                    Map<String, Object> map = JSON.parseObject(JSON.toJSONString(personBean.getData()));
+                    if (SharedPreferencesUtil.putMap(LoginActivity.this, map)) {
+                        Toast.makeText(LoginActivity.this, "图跃，分享你的生活", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, NavBottomActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Log.d("ERROR", "ERROR Login");
+                    }
+                } else {
+                    Toast.makeText(LoginActivity.this, personBean.getMsg(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
         // 登录逻辑
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
                 if (!account.equals("") && !password.equals("")) {
                     loginInfo.put("username", account);
@@ -187,14 +218,43 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        //注册按钮监听，跳转
-//        btnRegister.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        /*
+注册按钮监听，跳转
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+*/
+
+        //眼睛展示功能
+        passwordEye.setOnTouchListener((view, motionEvent) -> {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    passwordEye.setImageResource(R.drawable.open_eye);
+                    passwordText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    break;
+                }
+                case MotionEvent.ACTION_UP: {
+                    passwordEye.setImageResource(R.drawable.closed_eye);
+                    passwordText.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
+                    passwordText.setTypeface(Typeface.DEFAULT);
+                    break;
+                }
+                default: break;
+            }
+
+            // 光标判断
+            CharSequence charSequence = passwordText.getText();
+            if (charSequence != null) {
+                Spannable spannable = (Spannable) charSequence;
+                Selection.setSelection(spannable, charSequence.length());
+            };
+            return true;
+        });
 
     }
 
