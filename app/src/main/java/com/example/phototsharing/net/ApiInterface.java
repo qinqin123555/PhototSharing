@@ -13,14 +13,14 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
     @POST("api/member/photo/user/login")
-    Call<PersonBean> login(@Body LoginRequest loginRequest);
+    Call<PersonBean> login(@Header("appId") String appId, @Header("appSecret") String appSecret, @Query("username") String username, @Query("password") String password);
 
     public class LoginRequest {
-        private String account;
-        private String password;
+        private String username; // 用户名
+        private String password; // 密码
 
-        public LoginRequest(String account, String password) {
-            this.account = account;
+        public LoginRequest(String username, String password) {
+            this.username = username;
             this.password = password;
         }
     }

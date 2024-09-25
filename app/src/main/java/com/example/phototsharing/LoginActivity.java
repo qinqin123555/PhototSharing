@@ -62,11 +62,8 @@ public class LoginActivity extends AppCompatActivity {
     private Boolean eyeSwitch = false;
 
     //账户密码初始化
-    private String account = "";
+    private String username  = "";
     private String password = "";
-
-    //登录用户列表
-    Map<String, String> loginInfo = new HashMap<>();
 
     private Retrofit retrofit;
 
@@ -128,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (!editable.toString().equals("")) {
                     accountClose.setVisibility(View.VISIBLE);
                     accountView.setVisibility(View.GONE);
-                    account = editable.toString();
+                    username = editable.toString();
                 } else {
                     accountClose.setVisibility(View.GONE);
                     accountView.setVisibility(View.VISIBLE);
@@ -171,16 +168,21 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // 登录逻辑
+        // 登录逻辑
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String appId = "946c9e7fc48c4929be6c146343abe1a3";
+                String appSecret = "072631dda00ac616b433f90418a2f271604f0";
                 ApiInterface apiInterface = retrofit.create(ApiInterface.class);
-                ApiInterface.LoginRequest loginRequest = new ApiInterface.LoginRequest(account, password);
-                Call<PersonBean> call = apiInterface.login(loginRequest);
+
+                // 直接在请求中添加 username 和 password
+                Call<PersonBean> call = apiInterface.login(appId, appSecret, username, password);
 
                 call.enqueue(new Callback<PersonBean>() {
                     @Override
                     public void onResponse(Call<PersonBean> call, Response<PersonBean> response) {
+                        Log.d("LoginActivity", "Response: " + response.body());
                         if (response.isSuccessful() && response.body() != null) {
                             PersonBean personBean = response.body();
                             // 处理登录成功的逻辑
@@ -193,12 +195,14 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<PersonBean> call, Throwable t) {
+                        Log.e("LoginActivity", "Login failed: " + t.getMessage());
                         // 处理请求失败的逻辑
                         Toast.makeText(LoginActivity.this, "请求失败: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
+
 
 
         /*
