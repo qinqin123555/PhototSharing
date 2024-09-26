@@ -1,115 +1,73 @@
+// PersonBean.java
+
+// YApi QuickType插件生成，具体参考文档:https://plugins.jetbrains.com/plugin/18847-yapi-quicktype/documentation
+
 package com.example.phototsharing.entity;
+import androidx.annotation.NonNull;
+
+import java.util.List;
 
 public class PersonBean {
     private String msg;
-    private int code;
-    private DataBean data;
+    private long code;
+    private Data data;
 
-    public String getMsg() {
-        return msg;
+    public String getMsg() { return msg; }
+    public void setMsg(String value) { this.msg = value; }
+
+    public long getCode() { return code; }
+    public void setCode(long value) { this.code = value; }
+
+    public Data getData() { return data; }
+    public void setData(Data value) { this.data = value; }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "PersonBean{" +
+                "msg='" + msg + '\'' +
+                ", code=" + code +
+                ", data=" + (data != null ? data.toString() : "null") +
+                '}';
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
+}
 
-    public int getCode() {
-        return code;
-    }
+// Data.java
 
-    public void setCode(int code) {
-        this.code = code;
-    }
+// YApi QuickType插件生成，具体参考文档:https://plugins.jetbrains.com/plugin/18847-yapi-quicktype/documentation
 
-    public DataBean getData() {
-        return data;
-    }
+class Data {
+    private String createTime;
+    private String introduce;
+    private long sex;
+    private String appKey;
+    private String id;
+    private String avatar;
+    private String username;
+    private String lastUpdateTime;
 
-    public void setData(DataBean data) {
-        this.data = data;
-    }
+    public String getCreateTime() { return createTime; }
+    public void setCreateTime(String value) { this.createTime = value; }
 
-    public static class DataBean {
-        private String appKey;
-        private String avatar;
-        private String createTime;
-        private String id;
-        private String introduce;
-        private String lastUpdateTime;
-        private String password;
-        private String sex;
-        private String username;
+    public String getIntroduce() { return introduce; }
+    public void setIntroduce(String value) { this.introduce = value; }
 
-        public String getAppKey() {
-            return appKey;
-        }
+    public long getSex() { return sex; }
+    public void setSex(long value) { this.sex = value; }
 
-        public void setAppKey(String appKey) {
-            this.appKey = appKey;
-        }
+    public String getAppKey() { return appKey; }
+    public void setAppKey(String value) { this.appKey = value; }
 
-        public String getAvatar() {
-            return avatar;
-        }
+    public String getid() { return id; }
+    public void setid(String value) { this.id = value; }
 
-        public void setAvatar(String avatar) {
-            this.avatar = avatar;
-        }
+    public String getAvatar() { return avatar; }
+    public void setAvatar(String value) { this.avatar = value; }
 
-        public String getCreateTime() {
-            return createTime;
-        }
+    public String getUsername() { return username; }
+    public void setUsername(String value) { this.username = value; }
 
-        public void setCreateTime(String createTime) {
-            this.createTime = createTime;
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getIntroduce() {
-            return introduce;
-        }
-
-        public void setIntroduce(String introduce) {
-            this.introduce = introduce;
-        }
-
-        public String getLastUpdateTime() {
-            return lastUpdateTime;
-        }
-
-        public void setLastUpdateTime(String lastUpdateTime) {
-            this.lastUpdateTime = lastUpdateTime;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getSex() {
-            return sex;
-        }
-
-        public void setSex(String sex) {
-            this.sex = sex;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-    }
+    public String getLastUpdateTime() { return lastUpdateTime; }
+    public void setLastUpdateTime(String value) { this.lastUpdateTime = value; }
 }

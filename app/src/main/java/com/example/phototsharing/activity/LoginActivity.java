@@ -1,13 +1,9 @@
-package com.example.phototsharing;
+package com.example.phototsharing.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
@@ -24,22 +20,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
+import com.example.phototsharing.R;
 import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.net.ApiInterface;
 
 import com.example.phototsharing.utilis.KeyBoardUtil;
-import com.example.phototsharing.utilis.MergeURLUtil;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gson.Gson;
 
 //import okhttp3.Call;
 //import okhttp3.Callback;
@@ -47,14 +39,7 @@ import java.util.Map;
 
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
-
-
-import com.google.gson.Gson;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -64,8 +49,6 @@ public class LoginActivity extends AppCompatActivity {
     //账户密码初始化
     private String username  = "";
     private String password = "";
-
-    private Retrofit retrofit;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -78,8 +61,6 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        initRetrofit(); // 初始化 Retrofit
 
         //按钮
         final Button btnLogin = findViewById(R.id.login);
@@ -167,28 +148,39 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // 登录逻辑
-        // 登录逻辑
+        // 登录逻辑部分
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String appId = "946c9e7fc48c4929be6c146343abe1a3";
-                String appSecret = "072631dda00ac616b433f90418a2f271604f0";
-                ApiInterface apiInterface = retrofit.create(ApiInterface.class);
 
-                // 直接在请求中添加 username 和 password
-                Call<PersonBean> call = apiInterface.login(appId, appSecret, username, password);
+                Log.d("LoginActivity", "Username: " + username + ", Password: " + password);
+
+
+                ApiInterface apiInterface = RetrofitClient.getInstance().create(ApiInterface.class);
+
+                // 创建 LoginRequest 对象
+                ApiInterface.LoginRequest loginRequest = new ApiInterface.LoginRequest(username, password);
+
+
+                Gson gson = new Gson();
+                Log.d("LoginActivity", "LoginRequest: " + gson.toJson(loginRequest));
+
+                // 传递 LoginRequest 对象
+                // 传递 LoginRequest 对象并添加请求头
+                Call<PersonBean> call = apiInterface.login("946c9e7fc48c4929be6c146343abe1a3", "072631dda00ac616b433f90418a2f271604f0", loginRequest);
 
                 call.enqueue(new Callback<PersonBean>() {
                     @Override
                     public void onResponse(Call<PersonBean> call, Response<PersonBean> response) {
+                        Log.d("LoginActivity", "Response code: " + response.code());
                         Log.d("LoginActivity", "Response: " + response.body());
+
                         if (response.isSuccessful() && response.body() != null) {
                             PersonBean personBean = response.body();
-                            // 处理登录成功的逻辑
                             Toast.makeText(LoginActivity.this, "登录成功: " + personBean.getMsg(), Toast.LENGTH_SHORT).show();
                         } else {
-                            // 处理登录失败的逻辑
+                            // 打印错误信息
+                            Log.e("LoginActivity", "Error body: " + response.errorBody());
                             Toast.makeText(LoginActivity.this, "登录失败: " + response.message(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -196,13 +188,11 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<PersonBean> call, Throwable t) {
                         Log.e("LoginActivity", "Login failed: " + t.getMessage());
-                        // 处理请求失败的逻辑
                         Toast.makeText(LoginActivity.this, "请求失败: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
-
 
 
         /*
@@ -290,13 +280,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         // 如果当前焦点视图为空或不是 EditText 类型，返回 false，不需要隐藏输入法
         return false;
-    }
-
-    private void initRetrofit() {
-        retrofit = new Retrofit.Builder()
-                .baseUrl("https://api-store.openguet.cn/") // 设置基础 URL
-                .addConverterFactory(GsonConverterFactory.create()) // 添加 GSON 转换器
-                .build();
     }
 
 }
