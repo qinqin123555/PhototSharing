@@ -20,30 +20,30 @@ public class ShareDetailBean {
     public void setData(Data value) { this.data = value; }
 
     public static class Data {
-        private long collectId;
-        private long imageCode;
-        private long collectNum;
+        private Long collectId;
+        private Long imageCode;
+        private Long collectNum;
         private boolean hasCollect;
         private String title;
         private String content;
-        private long likeNum;
+        private Long likeNum;
         private List<String> imageUrlList;
-        private long createTime;
+        private Long createTime;
         private boolean hasLike;
-        private long likeId;
-        private long id;
+        private Long likeId;
+        private Long id;
         private boolean hasFocus;
-        private long pUserId;
+        private Long pUserId;
         private String username;
 
-        public long getCollectId() { return collectId; }
-        public void setCollectId(long value) { this.collectId = value; }
+        public Long getCollectId() { return collectId; }
+        public void setCollectId(Long value) { this.collectId = value; }
 
-        public long getImageCode() { return imageCode; }
-        public void setImageCode(long value) { this.imageCode = value; }
+        public Long getImageCode() { return imageCode; }
+        public void setImageCode(Long value) { this.imageCode = value; }
 
-        public long getCollectNum() { return collectNum; }
-        public void setCollectNum(long value) { this.collectNum = value; }
+        public Long getCollectNum() { return collectNum; }
+        public void setCollectNum(Long value) { this.collectNum = value; }
 
         public boolean getHasCollect() { return hasCollect; }
         public void setHasCollect(boolean value) { this.hasCollect = value; }
@@ -54,40 +54,33 @@ public class ShareDetailBean {
         public String getContent() { return content; }
         public void setContent(String value) { this.content = value; }
 
-        public long getLikeNum() { return likeNum; }
-        public void setLikeNum(long value) { this.likeNum = value; }
+        public Long getLikeNum() { return likeNum; }
+        public void setLikeNum(Long value) { this.likeNum = value; }
 
         public List<String> getImageUrlList() { return imageUrlList; }
         public void setImageUrlList(List<String> value) { this.imageUrlList = value; }
 
-        public long getCreateTime() { return createTime; }
-        public void setCreateTime(long value) { this.createTime = value; }
+        public Long getCreateTime() { return createTime; }
+        public void setCreateTime(Long value) { this.createTime = value; }
 
         public boolean getHasLike() { return hasLike; }
         public void setHasLike(boolean value) { this.hasLike = value; }
 
-        public long getLikeId() { return likeId; }
-        public void setLikeId(long value) { this.likeId = value; }
+        public Long getLikeId() { return likeId; }
+        public void setLikeId(Long value) { this.likeId = value; }
 
-        public long getid() { return id; }
-        public void setid(long value) { this.id = value; }
+        public Long getid() { return id; }
+        public void setid(Long value) { this.id = value; }
 
         public boolean getHasFocus() { return hasFocus; }
         public void setHasFocus(boolean value) { this.hasFocus = value; }
 
-        public long getPUserId() { return pUserId; }
-        public void setPUserId(long value) { this.pUserId = value; }
+        public Long getPUserId() { return pUserId; }
+        public void setPUserId(Long value) { this.pUserId = value; }
 
         public String getUsername() { return username; }
         public void setUsername(String value) { this.username = value; }
     }
 
 }
-
-
-
-
-// ImageUrlList.java
-
-// YApi QuickType插件生成，具体参考文档:https://plugins.jetbrains.com/plugin/18847-yapi-quicktype/documentation
 

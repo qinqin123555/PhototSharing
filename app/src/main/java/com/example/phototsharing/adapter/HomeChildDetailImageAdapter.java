@@ -1,6 +1,8 @@
 package com.example.phototsharing.adapter;
 
 import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +17,23 @@ import com.example.phototsharing.R;
 import java.util.List;
 
 public class HomeChildDetailImageAdapter extends RecyclerView.Adapter<HomeChildDetailImageAdapter.ViewHolder> {
-    private List<String> imgUrls;
-    private Context myContext;
 
-    public HomeChildDetailImageAdapter(Context context,List<String> imgUrlList){
-        this.imgUrls = imgUrlList;
-        this.myContext = context;
+    private List<String> imgUrls;
+    private Context context;
+
+
+    public HomeChildDetailImageAdapter(){
+
+    }
+
+    public HomeChildDetailImageAdapter(Context context,List<String> imgUrls){
+        this.imgUrls = imgUrls;
+        this.context = context;
+    }
+
+    public void changeAdapter(Context context,List<String> imgUrls){
+        this.imgUrls = imgUrls;
+        this.context = context;
     }
 
     @NonNull
@@ -33,30 +46,30 @@ public class HomeChildDetailImageAdapter extends RecyclerView.Adapter<HomeChildD
 
     @Override
     public void onBindViewHolder(@NonNull HomeChildDetailImageAdapter.ViewHolder holder, int position) {
-        Glide.with(myContext).load(imgUrls.get(position)).into(holder.itemImage);
+        if (imgUrls != null) {
+            Log.d("ImageAdapter", "Loading image: " + imgUrls.get(0));
+
+            Glide.with(context).load(imgUrls.get(0)).into(holder.homeChildDetailImage);
+        } else {
+            Log.d("ImageAdapter", "图片为空");
+
+        }
     }
 
     @Override
     public int getItemCount() {
-        if (imgUrls == null){
+        if (imgUrls != null){
+            return imgUrls.size();
+        } else {
             return 0;
         }
-        return imgUrls.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView itemImage;
+        public ImageView homeChildDetailImage;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            itemImage = itemView.findViewById(R.id.home_child_detail_image);
-
+            homeChildDetailImage = itemView.findViewById(R.id.home_child_detail_image);
         }
     }
-
-    public void changeAdapter(Context context,List<String> imgUrls){
-        this.imgUrls = imgUrls;
-        this.myContext = context;
-    }
-
 }
