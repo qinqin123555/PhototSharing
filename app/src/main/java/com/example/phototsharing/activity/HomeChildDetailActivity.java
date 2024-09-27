@@ -1,4 +1,4 @@
-package com.example.phototsharing;
+package com.example.phototsharing.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,8 +19,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.HomeChildDetailImageAdapter;
 import com.example.phototsharing.entity.ShareDetailBean;
 import com.example.phototsharing.net.ApiInterface;

@@ -18,7 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.phototsharing.HomeChildDetailActivity;
+import com.example.phototsharing.activity.HomeChildDetailActivity;
 import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.HomeChildRecyclerViewAdapter;
 import com.example.phototsharing.entity.ShareBean;

@@ -1,11 +1,9 @@
-package com.example.phototsharing;
+package com.example.phototsharing.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -13,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.MyFragmentAdapter;
 import com.example.phototsharing.fragment.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
