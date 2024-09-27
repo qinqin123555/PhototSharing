@@ -20,7 +20,7 @@ public interface ApiInterface {
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
             @Query("shareId") long shareId,
-            @Query("userId") long userId
+            @Query("userId") Long userId
     );
 }
 

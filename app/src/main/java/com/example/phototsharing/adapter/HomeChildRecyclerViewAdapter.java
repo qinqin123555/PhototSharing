@@ -17,12 +17,19 @@ import com.bumptech.glide.Glide;
 import com.example.phototsharing.R;
 import com.example.phototsharing.entity.ShareBean;
 
+import java.util.List;
+
 //设置首页子fragment中RecyclerView的适配器，用于江数据源中的数据绑定到RecyclerView的子项上
 
 public class HomeChildRecyclerViewAdapter extends RecyclerView.Adapter<HomeChildRecyclerViewAdapter.ViewHolder> {
     private ShareBean myData;
     private Context myContext;
     private OnItemClickListener myListener;
+
+    public HomeChildRecyclerViewAdapter(Context context){
+        this.myContext = context;
+    }
+
     public HomeChildRecyclerViewAdapter(ShareBean myData, Context myContext){
         this.myData = myData;
         this.myContext = myContext;
@@ -38,13 +45,23 @@ public class HomeChildRecyclerViewAdapter extends RecyclerView.Adapter<HomeChild
     }
 
 //   将数据绑定到ViewHolder上的控件上
-    @SuppressLint("SetTextI18n")
+
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onBindViewHolder(@NonNull HomeChildRecyclerViewAdapter.ViewHolder holder, int position) {
+
         holder.itemTitle.setText(myData.getData().getRecords().get(position).getTitle());
         holder.itemUsername.setText(myData.getData().getRecords().get(position).getUsername());
-        holder.itemLikeNumber.setText(Long.toString(myData.getData().getRecords().get(position).getLikeNum()));
-        Glide.with(myContext).load(myData.getData().getRecords().get(position).getImageUrlList().get(0)).into(holder.itemImage);
+        holder.itemLikeNumber.setText(String.format("%d", myData.getData().getRecords().get(position).getLikeNum()));
+
+        List<String> imgUrl = myData.getData().getRecords().get(position).getImageUrlList();
+
+        if (imgUrl.get(0) != null){
+            Glide.with(myContext).load(imgUrl.get(0)).into(holder.itemImage);
+        } else{
+            holder.itemImage.setImageResource(R.drawable.default_image);
+        }
+
 
 
     }
