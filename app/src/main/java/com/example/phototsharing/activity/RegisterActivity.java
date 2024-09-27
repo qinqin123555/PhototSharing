@@ -44,43 +44,43 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton = findViewById(R.id.register);
 
         // 设置按钮点击事件
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                registerUser();  // 调用注册方法
-            }
-        });
+//        registerButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                registerUser();  // 调用注册方法
+//            }
+//        });
     }
 
-    private void registerUser() {
-        // 获取用户输入
-        String username = usernameEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-
-        // 创建请求体对象
-        ApiInterface.RegisterRequest request = new ApiInterface.RegisterRequest(username, password);
-
-        // 创建 API 服务实例
-        ApiInterface apiService = RetrofitClient.getInstance().create(ApiInterface.class);
-
-        // 发起注册请求
-        Call<ResponseBody> call = apiService.registerUser(request);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                // 请求成功
-                if (response.isSuccessful()) {
-                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(RegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                // 网络错误处理
-                Toast.makeText(RegisterActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//    private void registerUser() {
+//        // 获取用户输入
+//        String username = usernameEditText.getText().toString();
+//        String password = passwordEditText.getText().toString();
+//
+//        // 创建请求体对象
+//        ApiInterface.RegisterRequest request = new ApiInterface.RegisterRequest(username, password);
+//
+//        // 创建 API 服务实例
+//        ApiInterface apiService = RetrofitClient.getInstance().create(ApiInterface.class);
+//
+//        // 发起注册请求
+//        Call<ResponseBody> call = apiService.registerUser(request);
+//        call.enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                // 请求成功
+//                if (response.isSuccessful()) {
+//                    Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(RegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                // 网络错误处理
+//                Toast.makeText(RegisterActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 }

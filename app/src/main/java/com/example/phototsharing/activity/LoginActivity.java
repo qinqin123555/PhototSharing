@@ -28,8 +28,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.phototsharing.R;
 import com.example.phototsharing.entity.PersonBean;
-import com.example.phototsharing.net.ApiInterface;
 
+import com.example.phototsharing.net.ApiInterface;
 import com.example.phototsharing.utilis.KeyBoardUtil;
 import com.google.gson.Gson;
 
@@ -149,50 +149,50 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // 登录逻辑部分
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Log.d("LoginActivity", "Username: " + username + ", Password: " + password);
-
-
-                ApiInterface apiInterface = RetrofitClient.getInstance().create(ApiInterface.class);
-
-                // 创建 LoginRequest 对象
-                ApiInterface.LoginRequest loginRequest = new ApiInterface.LoginRequest(username, password);
-
-
-                Gson gson = new Gson();
-                Log.d("LoginActivity", "LoginRequest: " + gson.toJson(loginRequest));
-
-                // 传递 LoginRequest 对象
-                // 传递 LoginRequest 对象并添加请求头
-                Call<PersonBean> call = apiInterface.login("946c9e7fc48c4929be6c146343abe1a3", "072631dda00ac616b433f90418a2f271604f0", loginRequest);
-
-                call.enqueue(new Callback<PersonBean>() {
-                    @Override
-                    public void onResponse(Call<PersonBean> call, Response<PersonBean> response) {
-                        Log.d("LoginActivity", "Response code: " + response.code());
-                        Log.d("LoginActivity", "Response: " + response.body());
-
-                        if (response.isSuccessful() && response.body() != null) {
-                            PersonBean personBean = response.body();
-                            Toast.makeText(LoginActivity.this, "登录成功: " + personBean.getMsg(), Toast.LENGTH_SHORT).show();
-                        } else {
-                            // 打印错误信息
-                            Log.e("LoginActivity", "Error body: " + response.errorBody());
-                            Toast.makeText(LoginActivity.this, "登录失败: " + response.message(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<PersonBean> call, Throwable t) {
-                        Log.e("LoginActivity", "Login failed: " + t.getMessage());
-                        Toast.makeText(LoginActivity.this, "请求失败: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
+//        btnLogin.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Log.d("LoginActivity", "Username: " + username + ", Password: " + password);
+//
+//
+//                ApiInterface apiInterface = RetrofitClient.getInstance().create(ApiInterface.class);
+//
+//                // 创建 LoginRequest 对象
+//                ApiInterface.LoginRequest loginRequest = new ApiInterface.LoginRequest(username, password);
+//
+//
+//                Gson gson = new Gson();
+//                Log.d("LoginActivity", "LoginRequest: " + gson.toJson(loginRequest));
+//
+//                // 传递 LoginRequest 对象
+//                // 传递 LoginRequest 对象并添加请求头
+//                Call<PersonBean> call = apiInterface.login("946c9e7fc48c4929be6c146343abe1a3", "072631dda00ac616b433f90418a2f271604f0", loginRequest);
+//
+//                call.enqueue(new Callback<PersonBean>() {
+//                    @Override
+//                    public void onResponse(Call<PersonBean> call, Response<PersonBean> response) {
+//                        Log.d("LoginActivity", "Response code: " + response.code());
+//                        Log.d("LoginActivity", "Response: " + response.body());
+//
+//                        if (response.isSuccessful() && response.body() != null) {
+//                            PersonBean personBean = response.body();
+//                            Toast.makeText(LoginActivity.this, "登录成功: " + personBean.getMsg(), Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            // 打印错误信息
+//                            Log.e("LoginActivity", "Error body: " + response.errorBody());
+//                            Toast.makeText(LoginActivity.this, "登录失败: " + response.message(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<PersonBean> call, Throwable t) {
+//                        Log.e("LoginActivity", "Login failed: " + t.getMessage());
+//                        Toast.makeText(LoginActivity.this, "请求失败: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//        });
 
 
         /*
