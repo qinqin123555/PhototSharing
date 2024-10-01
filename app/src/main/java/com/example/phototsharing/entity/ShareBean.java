@@ -88,7 +88,7 @@ public class ShareBean {
         public boolean getHasLike() { return hasLike; }
         public void setHasLike(boolean value) { this.hasLike = value; }
 
-        public Long getid() { return id; }
+        public long getid() { return id; }
         public void setid(Long value) { this.id = value; }
 
         public long getPUserId() { return pUserId; }

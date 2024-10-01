@@ -64,6 +64,16 @@ public interface ApiInterface {
             @Query("shareId") long shareId,
             @Query("size") long size
     );
+
+//    根据用户名获取用户信息
+    @GET("api/member/photo/user/getUserByName")
+    Call<PersonBean> getUserByName(
+            @Header("appId") String appId,
+            @Header("appSecret") String appSecret,
+            @Query("username") String userName
+    );
+
+
     // 登录请求类
     public class LoginRequest {
         private String username;

@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.HomeChildDetailFirstCommentAdapter;
 import com.example.phototsharing.adapter.HomeChildDetailImageAdapter;
@@ -31,7 +32,9 @@ import com.example.phototsharing.entity.CommentBean;
 import com.example.phototsharing.entity.ShareDetailBean;
 import com.example.phototsharing.net.ApiInterface;
 import com.example.phototsharing.net.MyHeaders;
+import com.example.phototsharing.net.MyRequest;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,6 +42,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class HomeChildDetailActivity extends AppCompatActivity {
+    private long shareId;
+    private String username;
+    private String avatar;
+
+
     private ShareDetailBean myShareDetailBean;
     private CommentBean myFirstComment;
     private HomeChildDetailImageAdapter homeChildDetailImageAdapter;
@@ -46,7 +54,7 @@ public class HomeChildDetailActivity extends AppCompatActivity {
     private Context myContext;
 
     private ImageView backImg;
-    private ImageView profilePicture;
+    private CircleImageView profilePicture;
     private TextView userName;
     private Button focusBtn;
 
@@ -54,6 +62,7 @@ public class HomeChildDetailActivity extends AppCompatActivity {
     private RecyclerView homeChildDetailImageRecyclerView;
     private TextView homeChildDetailTitle;
     private TextView homeChildDetailContent;
+    private TextView homeChildDetailTotalCommentNum;
     private RecyclerView commentView;
 
     private EditText homeChildDetailCommentEditText;
@@ -77,8 +86,15 @@ public class HomeChildDetailActivity extends AppCompatActivity {
 
 
 //        接收HomeChildFragment传来的shareId
-        Intent intent = getIntent();
-        long shareId = intent.getLongExtra("shareId",0);
+        Bundle receivedBundle = getIntent().getExtras();
+        if (receivedBundle != null) {
+
+            shareId = receivedBundle.getLong("shareId");
+            username = receivedBundle.getString("username");
+            avatar = receivedBundle.getString("avatar");
+        }
+
+
 
         //初始化一些参数
         myContext = getApplicationContext();
@@ -93,6 +109,7 @@ public class HomeChildDetailActivity extends AppCompatActivity {
         focusBtn = findViewById(R.id.focus);
         homeChildDetailTitle = findViewById(R.id.tv_home_child_detail_title);
         homeChildDetailContent = findViewById(R.id.tv_home_child_detail_content);
+        homeChildDetailTotalCommentNum = findViewById(R.id.tv_home_child_total_comment_num);
         commentView = findViewById(R.id.home_child_detail_comment_view);
         homeChildDetailCommentEditText = findViewById(R.id.home_child_detail_comment_edit_text);
         icLike = findViewById(R.id.iv_home_child_detail_like);
@@ -107,14 +124,17 @@ public class HomeChildDetailActivity extends AppCompatActivity {
 
                 //初始化一级评论区
                 loadFirstCommentData(shareId, new FirstCommentCallback() {
+                    @SuppressLint("DefaultLocale")
                     @Override
                     public void onSuccess(CommentBean firstcommentBean) {
-                        Log.e("TAG","评论数量"+String.valueOf(firstcommentBean.getData().getRecords().size()));
+                        homeChildDetailTotalCommentNum.setText(String.format("共%d条评论",firstcommentBean.getData().getTotal()));
+
+                        Log.e("TAG","评论数量"+String.valueOf(firstcommentBean.getData().getTotal()));
                         homeChildDetailFirstCommentAdapter = new HomeChildDetailFirstCommentAdapter(firstcommentBean,myContext);
-                        Log.e("TAG","评论数量"+String.valueOf(firstcommentBean.getData().getRecords().size()));
+                        Log.e("TAG","评论数量"+String.valueOf(firstcommentBean.getData().getTotal()));
 
                         commentView.setAdapter(homeChildDetailFirstCommentAdapter);
-                        Log.e("TAG","评论数量"+String.valueOf(firstcommentBean.getData().getRecords().size()));
+                        Log.e("TAG","评论数量"+String.valueOf(firstcommentBean.getData().getTotal()));
 
                         commentView.setLayoutManager(new LinearLayoutManager(myContext,LinearLayoutManager.VERTICAL,false));
                         commentView.addItemDecoration(new DividerItemDecoration(myContext, DividerItemDecoration.VERTICAL));
@@ -146,48 +166,51 @@ public class HomeChildDetailActivity extends AppCompatActivity {
         homeChildDetailImageRecyclerView.setAdapter(homeChildDetailImageAdapter);
         homeChildDetailImageRecyclerView.setLayoutManager(new LinearLayoutManager(myContext,LinearLayoutManager.HORIZONTAL,false));
 
+        //名字
         if (shareDetailBean.getData().getUsername() != null) {
             userName.setText(shareDetailBean.getData().getUsername());
         } else {
-            userName.setText("username");
+            userName.setText(username);
         }
+
+//        标题
         if (shareDetailBean.getData().getTitle() != null) {
             homeChildDetailTitle.setText(shareDetailBean.getData().getTitle());
         } else {
             homeChildDetailTitle.setText("标题");
         }
+//        内容
         if (shareDetailBean.getData().getContent() != null) {
             homeChildDetailContent.setText(shareDetailBean.getData().getContent());
         } else {
             homeChildDetailContent.setText("内容");
         }
+//        点赞数量
         if (shareDetailBean.getData().getLikeNum() != null) {
             likeNum.setText(String.format("%d",shareDetailBean.getData().getLikeNum()));
         } else {
             likeNum.setText("0");
         }
 
+//        收藏数量
         if (shareDetailBean.getData().getCollectNum() != null) {
             collectNum.setText(String.format("%d",shareDetailBean.getData().getCollectNum()));
         } else {
             collectNum.setText("0");
         }
-
-
-
+//        头像
+        if (shareDetailBean.getData().getAvatar() != null) {
+            Glide.with(myContext)
+                    .load(shareDetailBean.getData().getAvatar())
+                    .into(profilePicture);
+        } else {
+            Glide.with(myContext)
+                    .load(avatar)
+                    .into(profilePicture);
+        }
     }
 
 
-    //请求方法
-    private ApiInterface request() {
-        Retrofit myRetrofit = new Retrofit.Builder()
-                .baseUrl("https://api-store.openguet.cn/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        return myRetrofit.create(ApiInterface.class);
-
-    }
 
 
 //    定义获取分享详情的回调接口
@@ -198,7 +221,7 @@ public interface ShareDetailCallback {
 
 //获取分享详情
 public void loadShareDetailData(long shareId, ShareDetailCallback callback) {
-    ApiInterface myApiInterface = request(); // 假设request()方法返回你的ApiInterface实例
+    ApiInterface myApiInterface = MyRequest.request(); // 假设request()方法返回你的ApiInterface实例
     Call<ShareDetailBean> call = myApiInterface.getFindDetailInfo(MyHeaders.getAppId(), MyHeaders.getAppSecret(), shareId, 1838948060948992000L);
     call.enqueue(new Callback<ShareDetailBean>() {
         @Override
@@ -234,7 +257,7 @@ public interface FirstCommentCallback {
 //    获取一级评论
 // 注意：这里假设loadSecondCommentData已经被修改为接受一个回调接口
 private void loadFirstCommentData(long shareId, FirstCommentCallback callback) {
-    ApiInterface myApi = request();
+    ApiInterface myApi = MyRequest.request();
     Call<CommentBean> call = myApi.getFirstComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(), 1, shareId, 30);
     call.enqueue(new Callback<CommentBean>() {
         @Override
@@ -273,7 +296,7 @@ public interface SecondCommentCallback {
 
 //    获取二级评论
 public void loadSecondCommentData(long shareId, long firstCommentId, SecondCommentCallback callback) {
-    ApiInterface myApi = request(); // 假设request()是你的Retrofit API接口的实例创建方法
+    ApiInterface myApi = MyRequest.request(); // 假设request()是你的Retrofit API接口的实例创建方法
     Call<CommentBean> call = myApi.getSecondComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(), firstCommentId, 1, shareId, 30);
     call.enqueue(new Callback<CommentBean>() {
         @Override

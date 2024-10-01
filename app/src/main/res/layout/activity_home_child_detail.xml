@@ -6,40 +6,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.HomeChildDetailActivity">
-    <androidx.appcompat.widget.Toolbar
+    <RelativeLayout
         android:id="@+id/home_child_detail_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        android:orientation="horizontal"
+        android:padding="8dp">
         <ImageView
             android:id="@+id/iv_back"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:background="@drawable/ic_back"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
             android:contentDescription="TODO" />
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_picture"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="30dp"
-            android:background="@drawable/ic_personal_center_true"
+            android:scaleType="centerCrop"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_toRightOf="@+id/iv_back"
+            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
             android:contentDescription="TODO" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/username"
+            android:layout_toRightOf="@+id/profile_picture"
+            android:layout_centerVertical="true"
             android:text="username"
             android:textColor="@color/black"
             android:textSize="25sp"
-            android:layout_marginStart="30dp"/>
+            android:layout_marginStart="15dp"/>
+
         <Button
             android:id="@+id/focus"
             android:layout_width="90dp"
             android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:text="关注"
-            android:textSize="20sp"
-            android:layout_marginStart="55dp"/>
-    </androidx.appcompat.widget.Toolbar>
+            android:textSize="20sp"/>
+    </RelativeLayout>
 
 
     <ScrollView
@@ -85,7 +95,7 @@
                 android:background="@color/divider"
                 android:layout_below="@+id/tv_home_child_detail_content"/>
             <TextView
-                android:id="@+id/total_comment_num"
+                android:id="@+id/tv_home_child_total_comment_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/divider"
@@ -100,7 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:layout_below="@+id/total_comment_num"/>
+                android:layout_below="@+id/tv_home_child_total_comment_num"/>
 
 
 

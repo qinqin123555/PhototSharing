@@ -84,8 +84,12 @@ public class HomeChildFragment extends Fragment {
         homeChildRecyclerViewAdapter.setOnItemClickListener(new HomeChildRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putLong("shareId", Objects.requireNonNull(myData.getValue()).getData().getRecords().get(position).getid());
+                bundle.putString("username",myData.getValue().getData().getRecords().get(position).getUsername());
+                bundle.putString("avatar",myData.getValue().getData().getRecords().get(position).getAvatar());
                 Intent intent = new Intent(getActivity(), HomeChildDetailActivity.class);
-                intent.putExtra("shareId", Objects.requireNonNull(myData.getValue()).getData().getRecords().get(position).getid());
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });

@@ -3,6 +3,7 @@
 // YApi QuickType插件生成，具体参考文档:https://plugins.jetbrains.com/plugin/18847-yapi-quicktype/documentation
 
 package com.example.phototsharing.entity;
+
 import java.util.List;
 
 public class ShareDetailBean {
@@ -35,6 +36,7 @@ public class ShareDetailBean {
         private boolean hasFocus;
         private Long pUserId;
         private String username;
+        private String avatar;
 
         public Long getCollectId() { return collectId; }
         public void setCollectId(Long value) { this.collectId = value; }
@@ -80,6 +82,10 @@ public class ShareDetailBean {
 
         public String getUsername() { return username; }
         public void setUsername(String value) { this.username = value; }
+
+        public String getAvatar() { return avatar; }
+        public void setAvatar(String avatar) { this.avatar = avatar; }
+
     }
 
 }
