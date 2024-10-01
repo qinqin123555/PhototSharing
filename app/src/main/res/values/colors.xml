@@ -10,5 +10,6 @@
     <color name="status_gray">#C4C4C4</color>
     <color name="sex_gray">#80F1F1F1</color>
     <color name="gray">#F0F0F0</color>
-
+    <color name="divider">#DDDDDD</color>
+    <color name="gray_2">#DFD9E0</color>
 </resources>

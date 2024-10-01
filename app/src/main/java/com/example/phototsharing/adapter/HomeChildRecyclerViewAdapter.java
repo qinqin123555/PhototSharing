@@ -26,6 +26,7 @@ public class HomeChildRecyclerViewAdapter extends RecyclerView.Adapter<HomeChild
     private Context myContext;
     private OnItemClickListener myListener;
 
+
     public HomeChildRecyclerViewAdapter(Context context){
         this.myContext = context;
     }

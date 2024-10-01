@@ -36,58 +36,61 @@ public class CommentBean {
 
         public List<Record> getRecords() { return records; }
         public void setRecords(List<Record> value) { this.records = value; }
+
+        public static class Record {
+            private String createTime;
+            private long replyCommentId;
+            private long replyCommentUserId;
+            private long parentCommentId;
+            private String appKey;
+            private long shareId;
+            private long id;
+            private long commentLevel;
+            private long pUserId;
+            private String userName;
+            private String content;
+            private long parentCommentUserId;
+
+            public String getCreateTime() { return createTime; }
+            public void setCreateTime(String value) { this.createTime = value; }
+
+            public long getReplyCommentId() { return replyCommentId; }
+            public void setReplyCommentId(long value) { this.replyCommentId = value; }
+
+            public long getReplyCommentUserId() { return replyCommentUserId; }
+            public void setReplyCommentUserId(long value) { this.replyCommentUserId = value; }
+
+            public long getParentCommentId() { return parentCommentId; }
+            public void setParentCommentId(long value) { this.parentCommentId = value; }
+
+            public String getAppKey() { return appKey; }
+            public void setAppKey(String value) { this.appKey = value; }
+
+            public long getShareId() { return shareId; }
+            public void setShareId(long value) { this.shareId = value; }
+
+            public long getid() { return id; }
+            public void setid(long value) { this.id = value; }
+
+            public long getCommentLevel() { return commentLevel; }
+            public void setCommentLevel(long value) { this.commentLevel = value; }
+
+            public long getPUserId() { return pUserId; }
+            public void setPUserId(long value) { this.pUserId = value; }
+
+            public String getUserName() { return userName; }
+            public void setUserName(String value) { this.userName = value; }
+
+            public String getContent() { return content; }
+            public void setContent(String value) { this.content = value; }
+
+            public long getParentCommentUserId() { return parentCommentUserId; }
+            public void setParentCommentUserId(long value) { this.parentCommentUserId = value; }
+
+        }
     }
 
-    public static class Record {
-        private String createTime;
-        private long replyCommentId;
-        private long replyCommentUserId;
-        private long parentCommentId;
-        private String appKey;
-        private long shareId;
-        private long id;
-        private long commentLevel;
-        private long pUserId;
-        private String userName;
-        private String content;
-        private long parentCommentUserId;
 
-        public String getCreateTime() { return createTime; }
-        public void setCreateTime(String value) { this.createTime = value; }
-
-        public long getReplyCommentId() { return replyCommentId; }
-        public void setReplyCommentId(long value) { this.replyCommentId = value; }
-
-        public long getReplyCommentUserId() { return replyCommentUserId; }
-        public void setReplyCommentUserId(long value) { this.replyCommentUserId = value; }
-
-        public long getParentCommentId() { return parentCommentId; }
-        public void setParentCommentId(long value) { this.parentCommentId = value; }
-
-        public String getAppKey() { return appKey; }
-        public void setAppKey(String value) { this.appKey = value; }
-
-        public long getShareId() { return shareId; }
-        public void setShareId(long value) { this.shareId = value; }
-
-        public long getid() { return id; }
-        public void setid(long value) { this.id = value; }
-
-        public long getCommentLevel() { return commentLevel; }
-        public void setCommentLevel(long value) { this.commentLevel = value; }
-
-        public long getPUserId() { return pUserId; }
-        public void setPUserId(long value) { this.pUserId = value; }
-
-        public String getUserName() { return userName; }
-        public void setUserName(String value) { this.userName = value; }
-
-        public String getContent() { return content; }
-        public void setContent(String value) { this.content = value; }
-
-        public long getParentCommentUserId() { return parentCommentUserId; }
-        public void setParentCommentUserId(long value) { this.parentCommentUserId = value; }
-    }
 
 
 }

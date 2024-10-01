@@ -1,5 +1,6 @@
 package com.example.phototsharing.net;
 
+import com.example.phototsharing.entity.CommentBean;
 import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.entity.ResponseBody;
 import com.example.phototsharing.entity.ShareBean;
@@ -43,6 +44,26 @@ public interface ApiInterface {
             @Query("userId") Long userId
     );
 
+    //获取一级评论接口
+    @GET("api/member/photo/comment/first")
+    Call<CommentBean> getFirstComment(
+            @Header("appId") String appId,
+            @Header("appSecret") String appSecret,
+            @Query("current") long current,
+            @Query("shareId") long shareId,
+            @Query("size") long size
+    );
+
+    //获取二级评论
+    @GET("api/member/photo/comment/second")
+    Call<CommentBean> getSecondComment(
+            @Header("appId") String appId,
+            @Header("appSecret") String appSecret,
+            @Query("commentId") long commentId,
+            @Query("current") long current,
+            @Query("shareId") long shareId,
+            @Query("size") long size
+    );
     // 登录请求类
     public class LoginRequest {
         private String username;
