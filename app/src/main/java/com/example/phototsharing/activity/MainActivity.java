@@ -2,31 +2,37 @@ package com.example.phototsharing.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.MyFragmentAdapter;
 import com.example.phototsharing.fragment.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
 
     private ViewPager2 myViewPager;
     private BottomNavigationView bottomNavigationView;
     private MyFragmentAdapter myFragmentAdapter;
     private List<Fragment> myFragmentList;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +49,15 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.btm_nav);
 
         //初始化主界面
-        initeData();
+        initData();
         myFragmentAdapter = new MyFragmentAdapter(getSupportFragmentManager(),getLifecycle(),myFragmentList);
         myViewPager.setAdapter(myFragmentAdapter);
+        myViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return false;
+            }
+        });
 
         //使得Viewpager找到对应的fragment
         myViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -66,12 +78,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //底部导航栏监听事件
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.navigation_home) {
+                    myViewPager.setCurrentItem(0);
+                } else if (itemId == R.id.navigation_publish) {
+                    myViewPager.setCurrentItem(1);
+                } else if (itemId == R.id.navigation_mine) {
+                    myViewPager.setCurrentItem(2);
+                } else {
+                    myViewPager.setCurrentItem(0);
+                }
 
-
+                return true;
+            }
+        });
 
     }
 
-    private void initeData() {
+
+
+    private void initData() {
         myFragmentList = new ArrayList<>();
         HomeFragment homeFragment = HomeFragment.newInstance("首页","");
         myFragmentList.add(homeFragment);

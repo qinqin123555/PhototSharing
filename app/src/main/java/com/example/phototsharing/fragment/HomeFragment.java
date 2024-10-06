@@ -1,5 +1,6 @@
 package com.example.phototsharing.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,6 +36,8 @@ public class HomeFragment extends Fragment {
     private List<String> homeItemTitles;
     private HomeFragmentAdapter homeFragmentAdapter;
 
+    private long myUserId;
+
 
 
     public HomeFragment() {
@@ -53,6 +57,8 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myUserId = 1838948060948992000L;
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -67,6 +73,7 @@ public class HomeFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -77,6 +84,12 @@ public class HomeFragment extends Fragment {
         initData();
         homeFragmentAdapter = new HomeFragmentAdapter(getChildFragmentManager(),getLifecycle(),homeFragmentList,homeItemTitles);
         homeViewPager.setAdapter(homeFragmentAdapter);
+        homeViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(homeTabLayout, homeViewPager,
                 (tab, position) -> tab.setText(homeItemTitles.get(position)));
         tabLayoutMediator.attach();
@@ -85,10 +98,10 @@ public class HomeFragment extends Fragment {
     private void initData() {
         homeFragmentList = new ArrayList<>();
         homeItemTitles = new ArrayList<>();
-        HomeChildFragment homeChildFragment1 = HomeChildFragment.newInstance("关注");
-        HomeChildFragment homeChildFragment2 = HomeChildFragment.newInstance("发现");
-        homeFragmentList.add(homeChildFragment1);
-        homeFragmentList.add(homeChildFragment2);
+        HomeFocusFragment homeFocusFragment = HomeFocusFragment.newInstance(myUserId);
+        HomeFindFragment homeFindFragment2 = HomeFindFragment.newInstance("发现");
+        homeFragmentList.add(homeFocusFragment);
+        homeFragmentList.add(homeFindFragment2);
         homeItemTitles.add("关注");
         homeItemTitles.add("发现");
 

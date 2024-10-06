@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/custom_edit_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/white_2" /> <!-- 背景色 -->
+    <corners android:radius="50dp" /> <!-- 圆角半径 -->
+    <stroke android:width="2dp" android:color="@color/gray" /> <!-- 边框 -->
+</shape>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- drawable/button_style.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/white"/> <!-- 按下时的颜色 -->
+            <stroke android:width="2dp" android:color="@color/status_gray"/> <!-- 边框颜色 -->
+            <corners android:radius="20dp"/> <!-- 圆角 -->
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="#74AAF8"/> <!-- 默认颜色 -->
+            <stroke android:width="2dp" android:color="#74AAF8"/> <!-- 边框颜色 -->
+            <corners android:radius="20dp"/> <!-- 圆角 -->
+        </shape>
+    </item>
+</selector>

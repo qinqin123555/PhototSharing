@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <EditText
+        android:id="@+id/comment_input_edit"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_gravity="center"
+        android:hint="在此输入评论"
+        android:background="@drawable/comment_edit"
+        android:inputType="textAutoCorrect|textMultiLine"
+        android:focusable="true"
+        android:maxLines="5"
+        android:imeOptions="actionSend"
+        android:padding="16dp"/>
+    <Button
+        android:id="@+id/comment_send_Button"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="发送" />
+
+</LinearLayout>

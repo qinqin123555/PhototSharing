@@ -10,7 +10,6 @@
         <item name="android:textSize">25sp</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/button_login_style_ok</item>
-
     </style>
 
     <style name="btn_forget_or_register_style">
@@ -31,4 +30,6 @@
         <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/status_gray</item>
     </style>
+
+
 </resources>
