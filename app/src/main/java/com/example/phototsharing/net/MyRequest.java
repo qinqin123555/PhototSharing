@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.phototsharing.activity.LoginActivity;
 import com.example.phototsharing.entity.AddCommentBean;
 import com.example.phototsharing.entity.AddCollectBean;
 import com.example.phototsharing.entity.CommentBean;
@@ -15,6 +16,7 @@ import com.example.phototsharing.entity.HasFocusBean;
 import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.entity.ShareBean;
 import com.example.phototsharing.entity.ShareDetailBean;
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,6 +32,50 @@ public class MyRequest {
                 .build();
         return myRetrofit.create(ApiInterface.class);
     }
+
+    public static void login(String username, String password, LoginCallback callback) {
+        ApiInterface myApi = MyRequest.request();
+
+        // 创建 LoginRequestBody 实例
+//        ApiInterface.LoginRequestBody requestBody = new ApiInterface.LoginRequestBody(username, password);
+        Call<PersonBean> call = myApi.loginUser(
+                MyHeaders.getAppId(),
+                MyHeaders.getAppSecret(),
+                username,
+                password
+        );
+
+        // 打印 appId 和 appSecret
+        String appId = MyHeaders.getAppId();
+        String appSecret = MyHeaders.getAppSecret();
+
+        Log.d("MyRequest", "appId: " + appId);
+        Log.d("MyRequest", "appSecret: " + appSecret);
+
+//        Log.d("MyRequest", "LoginRequestBody: " + requestBody.toString());
+        Log.d("MyRequest", "Request Headers: " + MyHeaders.getHeaders().toString());
+        call.enqueue(new Callback<PersonBean>() {
+            @Override
+            public void onResponse(@NonNull Call<PersonBean> call, @NonNull Response<PersonBean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // 检查返回的代码
+                    if (response.body().getCode() == 200) {
+                        callback.onSuccess(response.body()); // 登录成功，返回 PersonBean
+                    } else {
+                        callback.onFailure(new Throwable("登录失败: " + response.body().getMsg()));
+                    }
+                } else {
+                    callback.onFailure(new Throwable("HTTP错误: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PersonBean> call, @NonNull Throwable t) {
+                callback.onFailure(t);
+            }
+        });
+    }
+
 
     public static  void getShareBeanData(long userId,GetShareBeanCallback callback) {
         ApiInterface myApiInterface = MyRequest.request();

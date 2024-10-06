@@ -11,26 +11,30 @@ import com.example.phototsharing.entity.ResponseBody;
 import com.example.phototsharing.entity.ShareBean;
 import com.example.phototsharing.entity.ShareDetailBean;
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
 
     // 登录接口
+    @FormUrlEncoded
     @POST("api/member/photo/user/login")
-    Call<PersonBean> login(
+    Call<PersonBean> loginUser(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
-            @Body LoginRequest request
+            @Field("username") String username,
+            @Field("password") String password
     );
 
-    // 注册接口
-    @POST("api/member/photo/user/register")
-    Call<ResponseBody> registerUser(@Body RegisterRequest request);
 
     // 获取分享信息接口
     @GET("api/member/photo/share")
@@ -174,15 +178,23 @@ public interface ApiInterface {
             @Query("likeId") long likeId
     );
 
+    public class LoginRequestBody {
+        @Override
+        public String toString() {
+            return "LoginRequestBody{" +
+                    "username='" + username + '\'' +
+                    ", password='" + password + '\'' +
+                    '}';
+        }
 
-
-    // 登录请求类
-    public class LoginRequest {
         private String username;
         private String password;
 
-        public LoginRequest(String username, String password) {
-            this.username = username;
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
             this.password = password;
         }
 
@@ -190,27 +202,18 @@ public interface ApiInterface {
             return username;
         }
 
-        public String getPassword() {
-            return password;
+        public void setUsername(String username) {
+            this.username = username;
         }
-    }
 
-    // 注册请求类
-    public class RegisterRequest {
-        private String username;
-        private String password;
 
-        public RegisterRequest(String username, String password) {
+
+        public LoginRequestBody(String username, String password) {
             this.username = username;
             this.password = password;
         }
 
-        public String getUsername() {
-            return username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
     }
+
+
 }

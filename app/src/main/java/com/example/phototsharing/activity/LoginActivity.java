@@ -2,6 +2,7 @@ package com.example.phototsharing.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -30,6 +31,8 @@ import com.example.phototsharing.R;
 import com.example.phototsharing.entity.PersonBean;
 
 import com.example.phototsharing.net.ApiInterface;
+import com.example.phototsharing.net.LoginCallback;
+import com.example.phototsharing.net.MyRequest;
 import com.example.phototsharing.utilis.KeyBoardUtil;
 import com.google.gson.Gson;
 
@@ -149,50 +152,40 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         // 登录逻辑部分
-//        btnLogin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                Log.d("LoginActivity", "Username: " + username + ", Password: " + password);
-//
-//
-//                ApiInterface apiInterface = RetrofitClient.getInstance().create(ApiInterface.class);
-//
-//                // 创建 LoginRequest 对象
-//                ApiInterface.LoginRequest loginRequest = new ApiInterface.LoginRequest(username, password);
-//
-//
-//                Gson gson = new Gson();
-//                Log.d("LoginActivity", "LoginRequest: " + gson.toJson(loginRequest));
-//
-//                // 传递 LoginRequest 对象
-//                // 传递 LoginRequest 对象并添加请求头
-//                Call<PersonBean> call = apiInterface.login("946c9e7fc48c4929be6c146343abe1a3", "072631dda00ac616b433f90418a2f271604f0", loginRequest);
-//
-//                call.enqueue(new Callback<PersonBean>() {
-//                    @Override
-//                    public void onResponse(Call<PersonBean> call, Response<PersonBean> response) {
-//                        Log.d("LoginActivity", "Response code: " + response.code());
-//                        Log.d("LoginActivity", "Response: " + response.body());
-//
-//                        if (response.isSuccessful() && response.body() != null) {
-//                            PersonBean personBean = response.body();
-//                            Toast.makeText(LoginActivity.this, "登录成功: " + personBean.getMsg(), Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            // 打印错误信息
-//                            Log.e("LoginActivity", "Error body: " + response.errorBody());
-//                            Toast.makeText(LoginActivity.this, "登录失败: " + response.message(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<PersonBean> call, Throwable t) {
-//                        Log.e("LoginActivity", "Login failed: " + t.getMessage());
-//                        Toast.makeText(LoginActivity.this, "请求失败: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
-//        });
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                username = accountText.getText().toString().trim(); // 获取用户名
+                password = passwordText.getText().toString().trim(); // 获取密码
+
+                // 确保用户名和密码不为空
+                if (username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "用户名和密码不能为空", Toast.LENGTH_SHORT).show();
+                    return; // 退出，避免空字段发送请求
+                }
+
+                Log.d("LoginActivity", "Username: " + username + ", Password: " + password);
+
+                // 调用login方法
+                MyRequest.login(username, password, new LoginCallback() {
+                    @Override
+                    public void onSuccess(PersonBean personBean) {
+                        Toast.makeText(LoginActivity.this, "登录成功: " + personBean.getMsg(), Toast.LENGTH_SHORT).show();
+                        // 登录成功后跳转到 MainActivity
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish(); // 结束当前活动，防止用户按返回键回到登录界面
+                    }
+
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.e("LoginActivity", "Login failed: " + t.getMessage());
+
+                        Toast.makeText(LoginActivity.this, "请求失败: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
 
 
         /*
