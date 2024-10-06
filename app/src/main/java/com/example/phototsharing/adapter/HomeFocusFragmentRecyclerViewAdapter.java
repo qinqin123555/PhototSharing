@@ -260,9 +260,9 @@ public class HomeFocusFragmentRecyclerViewAdapter extends RecyclerView.Adapter<H
         MyRequest.getFirstCommentData(shareId, new CommentCallback() {
             @SuppressLint("DefaultLocale")
             @Override
-            public void onSuccess(CommentBean firstcommentBean) {
-                commentTotalNum.setText(String.format("共%d条评论",firstcommentBean.getData().getTotal()));
-                HomeChildDetailFirstCommentAdapter homeChildDetailFirstCommentAdapter = new HomeChildDetailFirstCommentAdapter(firstcommentBean, myContext);
+            public void onSuccess(CommentBean commentBean) {
+                commentTotalNum.setText(String.format("共%d条评论", commentBean.getData().getTotal()));
+                HomeChildDetailFirstCommentAdapter homeChildDetailFirstCommentAdapter = new HomeChildDetailFirstCommentAdapter(commentBean, myContext);
                 commentListview.setAdapter(homeChildDetailFirstCommentAdapter);
                 commentListview.setLayoutManager(new LinearLayoutManager(myContext,LinearLayoutManager.VERTICAL,false));
                 commentListview.addItemDecoration(new DividerItemDecoration(myContext,DividerItemDecoration.VERTICAL));

@@ -130,7 +130,7 @@ public class MyRequest {
             public void onResponse(@NonNull Call<CommentBean> call, @NonNull Response<CommentBean> response) {
                 if (response.isSuccessful()) {
                     CommentBean commentBean = response.body();
-                    if (commentBean != null) {
+                    if (commentBean != null && commentBean.getData() != null) {
                         callback.onSuccess(commentBean);
                     } else {
                         // 可以在这里处理body为null的情况，例如通过callback返回错误信息

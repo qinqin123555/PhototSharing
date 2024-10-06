@@ -130,16 +130,16 @@ public class HomeFindDetailActivity extends AppCompatActivity {
                 MyRequest.getFirstCommentData(shareId, new CommentCallback() {
                     @SuppressLint("DefaultLocale")
                     @Override
-                    public void onSuccess(CommentBean firstcommentBean) {
-                        homeChildDetailTotalCommentNum.setText(String.format("共%d条评论",firstcommentBean.getData().getTotal()));
+                    public void onSuccess(CommentBean commentBean) {
+                        homeChildDetailTotalCommentNum.setText(String.format("共%d条评论", commentBean.getData().getTotal()));
 
-                        Log.e("TAG","评论数量"+String.valueOf(firstcommentBean.getData().getTotal()));
-                        homeChildDetailFirstCommentAdapter = new HomeChildDetailFirstCommentAdapter(firstcommentBean,myContext);
+                        Log.e("TAG","评论数量"+String.valueOf(commentBean.getData().getTotal()));
+                        homeChildDetailFirstCommentAdapter = new HomeChildDetailFirstCommentAdapter(commentBean,myContext);
                         homeChildDetailFirstCommentAdapter.notifyItemInserted(0);
-                        Log.e("TAG","评论数量"+String.valueOf(firstcommentBean.getData().getTotal()));
+                        Log.e("TAG","评论数量"+String.valueOf(commentBean.getData().getTotal()));
 
                         commentView.setAdapter(homeChildDetailFirstCommentAdapter);
-                        Log.e("TAG","评论数量"+String.valueOf(firstcommentBean.getData().getTotal()));
+                        Log.e("TAG","评论数量"+String.valueOf(commentBean.getData().getTotal()));
 
                         commentView.setLayoutManager(new LinearLayoutManager(myContext,LinearLayoutManager.VERTICAL,false));
                         commentView.addItemDecoration(new DividerItemDecoration(myContext, DividerItemDecoration.VERTICAL));

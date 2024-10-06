@@ -27,9 +27,10 @@ import retrofit2.Response;
 public class HomeChildDetailSecondCommentAdapter extends RecyclerView.Adapter<HomeChildDetailSecondCommentAdapter.ViewHolder> {
     private CommentBean secondComment;
     private Context myContext;
-    private HomeChildDetailSecondCommentAdapter homeChildDetailSecondCommentAdapter;
 
-    public HomeChildDetailSecondCommentAdapter(){}
+    public HomeChildDetailSecondCommentAdapter(Context myContext){
+        this.myContext = myContext;
+    }
 
     public HomeChildDetailSecondCommentAdapter(CommentBean secondComment, Context myContext) {
         this.secondComment = secondComment;
@@ -53,6 +54,8 @@ public class HomeChildDetailSecondCommentAdapter extends RecyclerView.Adapter<Ho
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.d("二级评论","进入二级评论Adapter");
+
         holder.secondCommentUserName.setText(secondComment.getData().getRecords().get(position).getUserName());
         holder.secondCommentContent.setText(secondComment.getData().getRecords().get(position).getContent());
         holder.secondCommentTime.setText(secondComment.getData().getRecords().get(position).getCreateTime());
@@ -80,15 +83,18 @@ public class HomeChildDetailSecondCommentAdapter extends RecyclerView.Adapter<Ho
 
     @Override
     public int getItemCount() {
-        return 0;
+        if (secondComment == null){
+            return 0;
+        }
+        return secondComment.getData().getRecords().size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private CircleImageView secondCommentAvatar;
-        private TextView secondCommentUserName;
-        private TextView secondCommentContent;
-        private TextView secondCommentTime;
+        public CircleImageView secondCommentAvatar;
+        public TextView secondCommentUserName;
+        public TextView secondCommentContent;
+        public TextView secondCommentTime;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

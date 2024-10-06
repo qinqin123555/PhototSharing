@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_first_comment_avatar"
@@ -46,7 +46,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_child_detail_second_comment_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"/>
 
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.phototsharing.adapter;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,15 +21,14 @@ import com.example.phototsharing.net.GetUserInfoCallback;
 import com.example.phototsharing.net.MyRequest;
 import com.example.phototsharing.net.CommentCallback;
 
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeChildDetailFirstCommentAdapter extends RecyclerView.Adapter<HomeChildDetailFirstCommentAdapter.viewHolder> {
     private Context myContext;
     private CommentBean myFirstCommentBean;
-
-    public HomeChildDetailFirstCommentAdapter(Context context){
-        this.myContext = context;
-    }
+    private ArrayList<CommentBean> secondCommentBeanList;
 
     public HomeChildDetailFirstCommentAdapter(CommentBean commentBean,Context context){
         this.myFirstCommentBean = commentBean;
@@ -51,7 +52,9 @@ public class HomeChildDetailFirstCommentAdapter extends RecyclerView.Adapter<Hom
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HomeChildDetailFirstCommentAdapter.viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeChildDetailFirstCommentAdapter.viewHolder holder, @SuppressLint("RecyclerView") int position) {
+
+
         holder.firstCommentUserName.setText(myFirstCommentBean.getData().getRecords().get(position).getUserName());
         holder.firstCommentContent.setText(myFirstCommentBean.getData().getRecords().get(position).getContent());
         holder.firstCommentTime.setText(myFirstCommentBean.getData().getRecords().get(position).getCreateTime());
@@ -80,16 +83,20 @@ public class HomeChildDetailFirstCommentAdapter extends RecyclerView.Adapter<Hom
             public void onSuccess(CommentBean commentBean) {
                 HomeChildDetailSecondCommentAdapter homeChildDetailSecondCommentAdapter = new HomeChildDetailSecondCommentAdapter(commentBean,myContext);
                 holder.secondCommentView.setAdapter(homeChildDetailSecondCommentAdapter);
+                holder.secondCommentView.setLayoutManager(new LinearLayoutManager(myContext,LinearLayoutManager.VERTICAL,false));
             }
-
             @Override
             public void onFailure(Throwable throwable) {
-                Log.d("TAG","没有二级评论");
+                Log.d("获取二级评论","没有二级评论");
             }
         });
 
+
+
+
+/*
 //       为一级评论设置点击监听
- /*       holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context context = holder.itemView.getContext();
@@ -106,10 +113,12 @@ public class HomeChildDetailFirstCommentAdapter extends RecyclerView.Adapter<Hom
 
                Log.d("TAG","点击评论");
             }
-        });*/
+        });
+*/
 
 
     }
+
 
 
         @Override
@@ -121,11 +130,11 @@ public class HomeChildDetailFirstCommentAdapter extends RecyclerView.Adapter<Hom
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {
-        private CircleImageView firstCommentAvatar;
-        private TextView firstCommentUserName;
-        private TextView firstCommentContent;
-        private TextView firstCommentTime;
-        private RecyclerView secondCommentView;
+        public CircleImageView firstCommentAvatar;
+        public TextView firstCommentUserName;
+        public TextView firstCommentContent;
+        public TextView firstCommentTime;
+        public RecyclerView secondCommentView;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -136,12 +145,4 @@ public class HomeChildDetailFirstCommentAdapter extends RecyclerView.Adapter<Hom
             secondCommentView = itemView.findViewById(R.id.home_child_detail_second_comment_view);
         }
     }
-
-
-
-
-
-
-
-
 }
