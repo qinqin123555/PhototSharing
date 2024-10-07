@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.example.phototsharing.R;
 
 import java.util.List;
@@ -46,13 +47,10 @@ public class HomeChildDetailImageAdapter extends RecyclerView.Adapter<HomeChildD
 
     @Override
     public void onBindViewHolder(@NonNull HomeChildDetailImageAdapter.ViewHolder holder, int position) {
-        if (imgUrls != null) {
-            Log.d("ImageAdapter", "Loading image: " + imgUrls.get(0));
-
-            Glide.with(context).load(imgUrls.get(0)).into(holder.homeChildDetailImage);
+        if (imgUrls != null && position <= imgUrls.size()) {
+            Glide.with(context).load(imgUrls.get(position)).into(holder.homeChildDetailImage);
         } else {
             Log.d("ImageAdapter", "图片为空");
-
         }
     }
 
