@@ -90,11 +90,11 @@ public class HomeFindDetailActivity extends AppCompatActivity {
             shareId = receivedBundle.getLong("shareId");
             username = receivedBundle.getString("username");
             avatar = receivedBundle.getString("avatar");
+            myUserId = receivedBundle.getLong("myUserId");
+            myUserName = receivedBundle.getString("myUserName");
         }
 
         //初始化一些参数
-        myUserId = 1838948060948992000L;
-        myUserName = "DM";
         myContext = getApplicationContext();
         homeChildDetailImageAdapter = new HomeChildDetailImageAdapter();
 //        homeChildDetailScrollView = findViewById(R.id.home_child_detail_scroll_view);
@@ -113,10 +113,18 @@ public class HomeFindDetailActivity extends AppCompatActivity {
         icCollect = findViewById(R.id.iv_home_child_detail_collect);
         collectNum = findViewById(R.id.tv_home_child_detail_collect_number);
 
+        Log.d("shareId",String.valueOf(shareId));
+        Log.d("myUserId",String.valueOf(myUserId));
+
+
+
 //        获取该分享的详细信息，并初始化页面
         MyRequest.getShareDetailData(shareId, myUserId,new ShareDetailCallback() {
             @Override
             public void onSuccess(ShareDetailBean shareDetailBean) {
+
+                Log.d("shareDetail","成功");
+
 
 //              是否关注、点赞、收藏
                 hasCollect = shareDetailBean.getData().getHasCollect();
@@ -155,6 +163,7 @@ public class HomeFindDetailActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Throwable throwable) {
+                Log.d("getShareDetail",String.valueOf(throwable));
 
             }
         });
@@ -227,12 +236,11 @@ public class HomeFindDetailActivity extends AppCompatActivity {
                     .into(profilePicture);
         }
 
+        focusBtn.setText("关注");
+
         if (hasFocus) {
             focusBtn.setText("已关注");
-        } else {
-            focusBtn.setText("关注");
         }
-
         icLike.setSelected(hasLike);
 
         icCollect.setSelected(hasCollect);

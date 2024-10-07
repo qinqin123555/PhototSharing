@@ -31,6 +31,7 @@ import com.example.phototsharing.net.MyRequest;
 public class HomeFocusFragment extends Fragment {
     private Context myContext;
     private long myUserId;
+    private String myUserName;
     private HasFocusBean myHasFocusBean;
 
     private RecyclerView myRecyclerView;
@@ -48,10 +49,12 @@ public class HomeFocusFragment extends Fragment {
     }
 
 
-    public static HomeFocusFragment newInstance(long userId) {
+    public static HomeFocusFragment newInstance(long myUserId,String myUserName) {
         HomeFocusFragment fragment = new HomeFocusFragment();
         Bundle args = new Bundle();
-        args.putLong("userId",userId);
+        args.putLong("myUserId",myUserId);
+        args.putString("myUserName",myUserName);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,10 +62,13 @@ public class HomeFocusFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        myUserId = (long) getArguments().get("userId");
 
-        myUserId = 1838948060948992000L;
+        if (getArguments() != null){
+           myUserName = getArguments().getString("myUserName");
+           myUserId = getArguments().getLong("myUserId");
+        }
         myContext = getActivity();
+
 
     }
 

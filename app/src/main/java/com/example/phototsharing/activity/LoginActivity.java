@@ -170,9 +170,17 @@ public class LoginActivity extends AppCompatActivity {
                 MyRequest.login(username, password, new LoginCallback() {
                     @Override
                     public void onSuccess(PersonBean personBean) {
+                        Log.d("code",personBean.getMsg());
+
+                        Log.d("LoginActivity", "Username: " + personBean.getData().getUsername() + ", UserId: " + personBean.getData().getid());
+
                         Toast.makeText(LoginActivity.this, "登录成功: " + personBean.getMsg(), Toast.LENGTH_SHORT).show();
                         // 登录成功后跳转到 MainActivity
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("myUserId",personBean.getData().getid());
+                        bundle.putString("myUserName",personBean.getData().getUsername());
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtras(bundle);
                         startActivity(intent);
                         finish(); // 结束当前活动，防止用户按返回键回到登录界面
                     }

@@ -24,7 +24,9 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM2 = "myUserName";
+    private static final String ARG_PARAM3 = "myUserId";
+
 
     private String mParam1;
     private String mParam2;
@@ -37,6 +39,7 @@ public class HomeFragment extends Fragment {
     private HomeFragmentAdapter homeFragmentAdapter;
 
     private long myUserId;
+    private String myUserName;
 
 
 
@@ -45,11 +48,12 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance(String title, String myUserName,long myUserId) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, title);
+        args.putString(ARG_PARAM2, myUserName);
+        args.putLong(ARG_PARAM3,myUserId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,11 +61,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myUserId = 1838948060948992000L;
+
 
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            myUserId = getArguments().getLong("myUserId");
+            myUserName = getArguments().getString("myUserName");
         }
 
 
@@ -98,8 +102,8 @@ public class HomeFragment extends Fragment {
     private void initData() {
         homeFragmentList = new ArrayList<>();
         homeItemTitles = new ArrayList<>();
-        HomeFocusFragment homeFocusFragment = HomeFocusFragment.newInstance(myUserId);
-        HomeFindFragment homeFindFragment2 = HomeFindFragment.newInstance("发现");
+        HomeFocusFragment homeFocusFragment = HomeFocusFragment.newInstance(myUserId,myUserName);
+        HomeFindFragment homeFindFragment2 = HomeFindFragment.newInstance(myUserName,myUserId);
         homeFragmentList.add(homeFocusFragment);
         homeFragmentList.add(homeFindFragment2);
         homeItemTitles.add("关注");
