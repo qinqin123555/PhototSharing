@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,14 +33,17 @@ public class HomeFindFragment extends Fragment {
     private HomeFindRecyclerViewAdapter homeFindRecyclerViewAdapter;
     private Context myContext;
     private RecyclerView myRecyclerView;
-    private long userId;
+    private long myUserId;
+    private String myUserName;
 
 
 
     // TODO: Rename and change types and number of parameters
-    public static HomeFindFragment newInstance(String param1) {
+    public static HomeFindFragment newInstance(String myUserName,long myUserId) {
         HomeFindFragment fragment = new HomeFindFragment();
         Bundle args = new Bundle();
+        args.putString("myUserName",myUserName);
+        args.putLong("myUserId",myUserId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,6 +52,12 @@ public class HomeFindFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myContext = getActivity();
+
+        if (getArguments() != null) {
+            myUserId = getArguments().getLong("myUserId");
+            Log.d("myUserId",String.valueOf(myUserId));
+            myUserName = getArguments().getString("myUserName");
+        }
 
     }
 
@@ -67,12 +77,11 @@ public class HomeFindFragment extends Fragment {
 
 
 
-        userId = 1838948060948992000L;
         // 初始化RecyclerView
         myRecyclerView = rootView.findViewById(R.id.home_child_recyclerview);
         // 设置LayoutManager（这里以LinearLayoutManager为例）
         myRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-        homeFindRecyclerViewAdapter = new HomeFindRecyclerViewAdapter(myContext);
+        homeFindRecyclerViewAdapter = new HomeFindRecyclerViewAdapter(myContext,myUserId);
         myRecyclerView.setAdapter(homeFindRecyclerViewAdapter);
 
         loadData();
@@ -93,6 +102,8 @@ public class HomeFindFragment extends Fragment {
                 bundle.putLong("shareId", shareId);
                 bundle.putString("username",username);
                 bundle.putString("avatar",avatar);
+                bundle.putString("myUserName",myUserName);
+                bundle.putLong("myUserId",myUserId);
                 Intent intent = new Intent(getActivity(), HomeFindDetailActivity.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -115,7 +126,9 @@ public class HomeFindFragment extends Fragment {
 
 
     private void loadData() {
-        MyRequest.getShareBeanData(userId, new GetShareBeanCallback() {
+        Log.d("myUserId",String.valueOf(myUserId));
+
+        MyRequest.getShareBeanData(myUserId, new GetShareBeanCallback() {
             @Override
             public void onSuccess(ShareBean shareBean) {
                 myShareBean = shareBean;

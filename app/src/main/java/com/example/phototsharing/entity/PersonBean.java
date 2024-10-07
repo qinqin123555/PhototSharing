@@ -2,6 +2,7 @@
 package com.example.phototsharing.entity;
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class PersonBean {
@@ -33,7 +34,7 @@ public class PersonBean {
         private String introduce;
         private long sex;
         private String appKey;
-        private String id;
+        private long id;
         private String avatar;
         private String username;
         private String lastUpdateTime;
@@ -50,8 +51,8 @@ public class PersonBean {
         public String getAppKey() { return appKey; }
         public void setAppKey(String value) { this.appKey = value; }
 
-        public String getid() { return id; }
-        public void setid(String value) { this.id = value; }
+        public long getid() { return id; }
+        public void setid(long value) { this.id = value; }
 
         public String getAvatar() { return avatar; }
         public void setAvatar(String value) { this.avatar = value; }

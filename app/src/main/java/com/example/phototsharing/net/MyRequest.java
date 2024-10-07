@@ -115,7 +115,10 @@ public class MyRequest {
                 if (response.isSuccessful()) {
                     ShareDetailBean shareDetailBean = response.body();
                     if (shareDetailBean != null) {
-                        callback.onSuccess(shareDetailBean);
+                        Log.d("msg",shareDetailBean.getMsg());
+                        if (shareDetailBean.getData()!= null){
+                            callback.onSuccess(shareDetailBean);
+                        }
                     } else {
                         // 可以选择在这里处理空响应体的情况，或者通过回调通知调用者
                         callback.onFailure(new NullPointerException("Response body is null"));

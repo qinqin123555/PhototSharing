@@ -27,11 +27,12 @@ public class HomeFindRecyclerViewAdapter extends RecyclerView.Adapter<HomeFindRe
     private ShareBean myData;
     private Context myContext;
     private OnItemClickListener myListener;
-    private final long userId = 1838948060948992000L;
+    private long myUserId;
 
 
-    public HomeFindRecyclerViewAdapter(Context myContext){
+    public HomeFindRecyclerViewAdapter(Context myContext,long myUserId){
         this.myContext = myContext;
+        this.myUserId = myUserId;
     }
 
 /*
@@ -85,7 +86,7 @@ public class HomeFindRecyclerViewAdapter extends RecyclerView.Adapter<HomeFindRe
             @Override
             public void onClick(View view) {
                 if (myData.getData().getRecords().get(position).getHasLike()) {
-                    MyRequest.cancelLikeRequest(shareId, userId, new TrueOrFalseCallback() {
+                    MyRequest.cancelLikeRequest(shareId, myUserId, new TrueOrFalseCallback() {
                         @Override
                         public void onSuccess(Boolean b) {
                             holder.itemLikeImage.setSelected(b);
@@ -104,7 +105,7 @@ public class HomeFindRecyclerViewAdapter extends RecyclerView.Adapter<HomeFindRe
                         }
                     });
                 } else {
-                    MyRequest.setLikeRequest(shareId, userId, new TrueOrFalseCallback() {
+                    MyRequest.setLikeRequest(shareId, myUserId, new TrueOrFalseCallback() {
                         @Override
                         public void onSuccess(Boolean b) {
                             holder.itemLikeImage.setSelected(b);

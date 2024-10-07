@@ -2,13 +2,13 @@ package com.example.phototsharing.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -18,10 +18,12 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.MyFragmentAdapter;
+import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.fragment.HomeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,8 @@ public class MainActivity extends FragmentActivity {
     private BottomNavigationView bottomNavigationView;
     private MyFragmentAdapter myFragmentAdapter;
     private List<Fragment> myFragmentList;
+    private long myUserId;
+    private String myUserName;
 
     @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility"})
     @Override
@@ -44,6 +48,12 @@ public class MainActivity extends FragmentActivity {
             return insets;
         });
 
+
+        Bundle receivedBundle = getIntent().getExtras();
+        if (receivedBundle != null) {
+            myUserId = receivedBundle.getLong("myUserId");
+            myUserName = receivedBundle.getString("myUserName");
+        }
 
         myViewPager = findViewById(R.id.viewpager);
         bottomNavigationView = findViewById(R.id.btm_nav);
@@ -102,10 +112,10 @@ public class MainActivity extends FragmentActivity {
 
     private void initData() {
         myFragmentList = new ArrayList<>();
-        HomeFragment homeFragment = HomeFragment.newInstance("首页","");
+        HomeFragment homeFragment = HomeFragment.newInstance("首页",myUserName,myUserId);
         myFragmentList.add(homeFragment);
-        HomeFragment fineFragment = HomeFragment.newInstance("发现","");
-        HomeFragment mineFragment = HomeFragment.newInstance("我的","");
+        HomeFragment fineFragment = HomeFragment.newInstance("发现",myUserName,myUserId);
+        HomeFragment mineFragment = HomeFragment.newInstance("我的",myUserName,myUserId);
         myFragmentList.add(fineFragment);
         myFragmentList.add(mineFragment);
 
