@@ -195,9 +195,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-        /*
-注册按钮监听，跳转
+//注册按钮监听，跳转
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -205,8 +203,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-*/
 
         //眼睛展示功能
         passwordEye.setOnTouchListener((view, motionEvent) -> {
