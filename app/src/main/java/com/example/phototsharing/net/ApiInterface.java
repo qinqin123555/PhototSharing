@@ -7,19 +7,14 @@ import com.example.phototsharing.entity.AddFocusBean;
 import com.example.phototsharing.entity.AddLikeBean;
 import com.example.phototsharing.entity.HasFocusBean;
 import com.example.phototsharing.entity.PersonBean;
-import com.example.phototsharing.entity.ResponseBody;
 import com.example.phototsharing.entity.ShareBean;
 import com.example.phototsharing.entity.ShareDetailBean;
 
-import java.util.Map;
-
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
