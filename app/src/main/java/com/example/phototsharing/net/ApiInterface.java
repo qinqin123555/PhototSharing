@@ -7,19 +7,14 @@ import com.example.phototsharing.entity.AddFocusBean;
 import com.example.phototsharing.entity.AddLikeBean;
 import com.example.phototsharing.entity.HasFocusBean;
 import com.example.phototsharing.entity.PersonBean;
-import com.example.phototsharing.entity.ResponseBody;
 import com.example.phototsharing.entity.ShareBean;
 import com.example.phototsharing.entity.ShareDetailBean;
 
-import java.util.Map;
-
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -141,11 +136,19 @@ public interface ApiInterface {
             @Query("focusUserId") long focusUserId,
             @Query("userId") long userId
     );
+    //    获取已经点赞的列表
+    @GET("api/member/photo/collect")
+    Call<HasFocusBean> getCollectInfo(
+            @Header("appId") String appId,
+            @Header("appSecret") String appSecret,
+            @Query("current") long current,
+            @Query("size") long size,
+            @Query("userId") long userId
+    );
 
 //    添加收藏
-//    添加关注
     @POST("api/member/photo/collect")
-    Call<AddCollectBean> getCollectInfo(
+    Call<AddCollectBean> setCollectInfo(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
             @Query("shareId") long shareId,
@@ -154,15 +157,25 @@ public interface ApiInterface {
 
 //    取消收藏
     @POST("api/member/photo/collect/cancel")
-    Call<AddCollectBean> getCollectCancelInfo(
+    Call<AddCollectBean> setCollectCancelInfo(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
             @Query("collectId") long collectId
     );
 
-//    添加点赞
+//    获取已经点赞的列表
+    @GET("api/member/photo/like")
+    Call<HasFocusBean> getLikeInfo(
+            @Header("appId") String appId,
+            @Header("appSecret") String appSecret,
+            @Query("current") long current,
+            @Query("size") long size,
+            @Query("userId") long userId
+    );
+
+    //    添加点赞
     @POST("api/member/photo/like")
-    Call<AddLikeBean> getLikeInfo(
+    Call<AddLikeBean> setLikeInfo(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
             @Query("shareId") long shareId,
@@ -172,7 +185,7 @@ public interface ApiInterface {
 //    取消点赞
 
     @POST("api/member/photo/like/cancel")
-    Call<AddLikeBean> getLikeCancelInfo(
+    Call<AddLikeBean> setLikeCancelInfo(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
             @Query("likeId") long likeId
