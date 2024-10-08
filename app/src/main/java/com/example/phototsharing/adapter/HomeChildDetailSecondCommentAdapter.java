@@ -1,11 +1,13 @@
 package com.example.phototsharing.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +20,8 @@ import com.example.phototsharing.net.ApiInterface;
 import com.example.phototsharing.net.GetUserInfoCallback;
 import com.example.phototsharing.net.MyHeaders;
 import com.example.phototsharing.net.MyRequest;
+import com.example.phototsharing.net.TrueOrFalseCallback;
+import com.example.phototsharing.utilis.DialogWithKeyboard;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -27,20 +31,23 @@ import retrofit2.Response;
 public class HomeChildDetailSecondCommentAdapter extends RecyclerView.Adapter<HomeChildDetailSecondCommentAdapter.ViewHolder> {
     private CommentBean secondComment;
     private Context myContext;
+    private long parentCommentId;
+    private long parentCommentUserId;
+    private long myUserId;
+    private String myUserName;
 
     public HomeChildDetailSecondCommentAdapter(Context myContext){
         this.myContext = myContext;
     }
 
-    public HomeChildDetailSecondCommentAdapter(CommentBean secondComment, Context myContext) {
+    public HomeChildDetailSecondCommentAdapter(CommentBean secondComment, Context myContext,long ParentCommentId,long ParentCommentUserId,long myUserId,String myUserName) {
         this.secondComment = secondComment;
         this.myContext = myContext;
+        this.parentCommentId = ParentCommentId;
+        this.parentCommentUserId = ParentCommentUserId;
+        this.myUserId = myUserId;
+        this.myUserName = myUserName;
     }
-    public void changeAdapter(CommentBean secondComment,Context myContext) {
-        this.secondComment = secondComment;
-        this.myContext = myContext;
-    }
-
 
 
     @NonNull
@@ -53,7 +60,7 @@ public class HomeChildDetailSecondCommentAdapter extends RecyclerView.Adapter<Ho
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Log.d("二级评论","进入二级评论Adapter");
 
         holder.secondCommentUserName.setText(secondComment.getData().getRecords().get(position).getUserName());
@@ -76,6 +83,45 @@ public class HomeChildDetailSecondCommentAdapter extends RecyclerView.Adapter<Ho
                 Log.e("TAG","无头像");
             }
         });
+
+
+//        为一级评论设置点击监听
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = holder.itemView.getContext();
+                long replyCommentId = secondComment.getData().getRecords().get(position).getid();
+                long replyCommentUserId = secondComment.getData().getRecords().get(position).getPUserId();
+                long shareId = secondComment.getData().getRecords().get(position).getShareId();
+
+
+                DialogWithKeyboard dialogWithKeyboard = new DialogWithKeyboard(new DialogWithKeyboard.OnSendClickListener() {
+                    @Override
+                    public void onSendClick(String content) {
+                        Log.d("TAG","点击发送评论");
+                        Log.d("content",content);
+
+                        if (!content.isEmpty()){
+                            MyRequest.addSecondComment(content, parentCommentId, parentCommentUserId, replyCommentId, replyCommentUserId, shareId, myUserId, myUserName, new TrueOrFalseCallback() {
+                                @Override
+                                public void onSuccess(Boolean b) {
+                                    Toast.makeText(myContext,"成功回复",Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onFailure(Throwable throwable) {
+                                    Toast.makeText(myContext,String.valueOf(throwable),Toast.LENGTH_SHORT).show();
+
+                                }
+                            });                        }
+                    }
+                });
+                dialogWithKeyboard.showDialogWithKeyboard(myContext);
+
+                Log.d("TAG","点击评论");
+            }
+        });
+
 
 
 

@@ -16,7 +16,6 @@ import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.entity.RegisterBean;
 import com.example.phototsharing.entity.ShareBean;
 import com.example.phototsharing.entity.ShareDetailBean;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -291,7 +290,7 @@ public class MyRequest {
     }
 
 //    新增一条一级评论
-public static void addFirstComment(Context context,String content, long shareId, long userId, String userName) {
+public static void addFirstComment(Context context,String content, long shareId, long userId, String userName,TrueOrFalseCallback callback) {
     ApiInterface myApi = MyRequest.request();
     Call<AddCommentBean> call = myApi.setFirstComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(), content, shareId, userId, userName);
     call.enqueue(new Callback<AddCommentBean>() {
@@ -299,32 +298,29 @@ public static void addFirstComment(Context context,String content, long shareId,
         public void onResponse(@NonNull Call<AddCommentBean> call, @NonNull Response<AddCommentBean> response) {
             if (response.isSuccessful() && response.body() != null) {
                 if (response.body().getCode() == 200) {
-                    Log.d("TAG","发送了一条评论");
-                    Toast.makeText(context,"评论成功",Toast.LENGTH_SHORT).show();
+                    callback.onSuccess(true);
                 } else {
-                    Log.d("TAG","code不等于200");
-                    Log.d("Msg",response.body().getMsg());
-                    Log.d("Code",String.valueOf(response.body().getCode()));
+
+                    callback.onFailure(new Throwable("code = "+String.valueOf(response.body().getCode())+response.body().getMsg()));
 
                     Toast.makeText(context,"评论失败",Toast.LENGTH_SHORT).show();
 
                 }
             } else {
-                Log.d("TAG","response失败");
+                callback.onFailure(new Throwable("response失败"));
                 Toast.makeText(context,"评论失败",Toast.LENGTH_SHORT).show();
             }
         }
         @Override
         public void onFailure(@NonNull Call<AddCommentBean> call, @NonNull Throwable t) {
-            Log.d("onFailure", String.valueOf(t));
-            Toast.makeText(context,"评论失败",Toast.LENGTH_SHORT).show();
+            callback.onFailure(t);
         }
     });
 }
 
 
     //    新增一条二级评论
-    public static void addSecondComment (String content,long parentCommentId,long parentCommentUserId,long replyCommentId,long replyCommentUserId,long shareId,long userId,String userName) {
+    public static void addSecondComment (String content,long parentCommentId,long parentCommentUserId,long replyCommentId,long replyCommentUserId,long shareId,long userId,String userName,TrueOrFalseCallback callback) {
         ApiInterface myApi = MyRequest.request();
         Call<AddCommentBean> call = myApi.setSecondComment(MyHeaders.getAppId(),MyHeaders.getAppSecret(),
                         content,parentCommentId,parentCommentUserId, replyCommentId,
@@ -332,16 +328,20 @@ public static void addFirstComment(Context context,String content, long shareId,
         call.enqueue(new Callback<AddCommentBean>() {
             @Override
             public void onResponse(@NonNull Call<AddCommentBean> call, @NonNull Response<AddCommentBean> response) {
-                if (response.isSuccessful()) {
-                    if (response.body() != null && response.body().getCode() == 200) {
-
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getCode() == 200) {
+                        callback.onSuccess(true);
+                    } else {
+                        callback.onFailure(new Throwable("code = " + String.valueOf(response.body().getCode()) + " " + response.body().getMsg()));
                     }
+                } else {
+                    callback.onFailure(new Throwable("response is failure"));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<AddCommentBean> call, @NonNull Throwable t) {
-
+                callback.onFailure(t);
             }
         });
     }
@@ -424,10 +424,33 @@ public static void addFirstComment(Context context,String content, long shareId,
         });
     }
 
+
+    //   获取当前登录用户的已关注列表
+    public static void getLikeInfo(long current,long size,long userId, GetFocusBeanCallback callback) {
+        ApiInterface myApi = MyRequest.request();
+        Call<HasFocusBean> call = myApi.getLikeInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),current,size,userId);
+        call.enqueue(new Callback<HasFocusBean>() {
+            @Override
+            public void onResponse(@NonNull Call<HasFocusBean> call, @NonNull Response<HasFocusBean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onFailure(new Throwable("response is null"));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<HasFocusBean> call, @NonNull Throwable t) {
+                callback.onFailure(new Throwable("获取已点赞用户的图文列表失败"));
+            }
+        });
+
+    }
+
 //       添加点赞的网络请求
     public static void setLikeRequest(long shareId, long userId,TrueOrFalseCallback callback){
         ApiInterface myApi = MyRequest.request();
-        Call<AddLikeBean> call = myApi.getLikeInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),shareId,userId);
+        Call<AddLikeBean> call = myApi.setLikeInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),shareId,userId);
         call.enqueue(new Callback<AddLikeBean>() {
             @Override
             public void onResponse(@NonNull Call<AddLikeBean> call, @NonNull Response<AddLikeBean> response) {
@@ -457,7 +480,7 @@ public static void addFirstComment(Context context,String content, long shareId,
             public void onSuccess(ShareDetailBean shareDetailBean) {
                 long likeId = shareDetailBean.getData().getLikeId();
                 ApiInterface myApi = MyRequest.request();
-                Call<AddLikeBean> call = myApi.getLikeCancelInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),likeId);
+                Call<AddLikeBean> call = myApi.setLikeCancelInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),likeId);
                 call.enqueue(new Callback<AddLikeBean>() {
                     @Override
                     public void onResponse(@NonNull Call<AddLikeBean> call, @NonNull Response<AddLikeBean> response) {
@@ -485,10 +508,32 @@ public static void addFirstComment(Context context,String content, long shareId,
         });
     }
 
+//  获取当前登录用户已收藏列表
+    public static void getCollectInfo(long current,long size,long userId, GetFocusBeanCallback callback) {
+        ApiInterface myApi = MyRequest.request();
+        Call<HasFocusBean> call = myApi.getCollectInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),current,size,userId);
+        call.enqueue(new Callback<HasFocusBean>() {
+            @Override
+            public void onResponse(@NonNull Call<HasFocusBean> call, @NonNull Response<HasFocusBean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onFailure(new Throwable("response is null"));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<HasFocusBean> call, @NonNull Throwable t) {
+                callback.onFailure(new Throwable("获取已收藏用户的图文列表失败"));
+            }
+        });
+
+    }
+
     //    添加收藏的网络请求
     public static void setCollectRequest(long shareId,long userId, TrueOrFalseCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<AddCollectBean> call = myApi.getCollectInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),shareId,userId);
+        Call<AddCollectBean> call = myApi.setCollectInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),shareId,userId);
         call.enqueue(new Callback<AddCollectBean>() {
             @Override
             public void onResponse(@NonNull Call<AddCollectBean> call, @NonNull Response<AddCollectBean> response) {
@@ -519,7 +564,7 @@ public static void addFirstComment(Context context,String content, long shareId,
             public void onSuccess(ShareDetailBean shareDetailBean) {
                 long collectId = shareDetailBean.getData().getCollectId();
                 ApiInterface myApi = MyRequest.request();
-                Call<AddCollectBean> call = myApi.getCollectCancelInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),collectId);
+                Call<AddCollectBean> call = myApi.setCollectCancelInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),collectId);
                 call.enqueue(new Callback<AddCollectBean>() {
                     @Override
                     public void onResponse(@NonNull Call<AddCollectBean> call, @NonNull Response<AddCollectBean> response) {

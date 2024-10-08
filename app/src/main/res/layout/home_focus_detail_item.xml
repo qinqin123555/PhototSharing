@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     cardCornerRadius="8dp"
-    android:layout_margin="8dp">
+    android:layout_margin="15dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -38,8 +38,8 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/focus_image_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:layout_margin="8dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
             android:layout_below="@+id/focus_top"/>
 
         <LinearLayout
@@ -82,6 +82,22 @@
                 android:layout_marginStart="8dp"
                 android:text="0"
                 android:textSize="20sp"/>
+            <ImageView
+                android:id="@+id/iv_home_focus_comment"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_comment"
+                android:layout_marginStart="8dp"
+                android:contentDescription="TODO" />
+            <TextView
+                android:id="@+id/tv_home_focus_comment_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:text="0"
+                android:textSize="20sp"/>
         </LinearLayout>
         <View
             android:id="@+id/divider"
@@ -106,16 +122,6 @@
             android:layout_below="@+id/tv_home_focus_title"
             android:layout_margin="8dp"
             android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tv_home_focus_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:padding="8dp"
-            android:layout_below="@+id/tv_home_focus_content"
-            android:background="@color/gray"
-            android:layout_margin="10dp"/>
     </RelativeLayout>
 
 

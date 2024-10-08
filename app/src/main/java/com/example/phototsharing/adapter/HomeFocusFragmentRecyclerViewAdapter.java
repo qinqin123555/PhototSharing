@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.example.phototsharing.R;
 import com.example.phototsharing.entity.CommentBean;
 import com.example.phototsharing.entity.HasFocusBean;
@@ -55,22 +55,58 @@ public class HomeFocusFragmentRecyclerViewAdapter extends RecyclerView.Adapter<H
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HomeFocusFragmentRecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeFocusFragmentRecyclerViewAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        HomeChildDetailImageAdapter homeChildDetailImageAdapter = new HomeChildDetailImageAdapter(
-                myContext,
-                hasFocusBean.getData().getRecords().get(position).getImageUrlList());
+        if (!hasFocusBean.getData().getRecords().get(position).getImageUrlList().isEmpty()){
+            HomeChildDetailImageAdapter homeChildDetailImageAdapter = new HomeChildDetailImageAdapter(
+                    myContext,
+                    hasFocusBean.getData().getRecords().get(position).getImageUrlList());
+            holder.imgViewPager2.setAdapter(homeChildDetailImageAdapter);
+
+        }
+
 
         Glide.with(myContext).load(hasFocusBean.getData().getRecords().get(position).getAvatar()).into(holder.itemAvatar);
         holder.itemUserName.setText(hasFocusBean.getData().getRecords().get(position).getUsername());
-        holder.imgViewPager2.setAdapter(homeChildDetailImageAdapter);
         holder.itemLikeImage.setSelected(hasFocusBean.getData().getRecords().get(position).getHasLike());
         holder.itemLikeNum.setText(String.valueOf(hasFocusBean.getData().getRecords().get(position).getLikeNum()));
         holder.itemCollect.setSelected(hasFocusBean.getData().getRecords().get(position).getHasCollect());
         holder.itemCollectNum.setText(String.valueOf(hasFocusBean.getData().getRecords().get(position).getCollectNum()));
         holder.itemTitle.setText(hasFocusBean.getData().getRecords().get(position).getTitle());
         holder.itemContent.setText(hasFocusBean.getData().getRecords().get(position).getContent());
-        holder.itemCommentArea.setText("评论区");
+
+        MyRequest.getFirstCommentData(hasFocusBean.getData().getRecords().get(position).getid(), new CommentCallback() {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onSuccess(CommentBean commentBean) {
+                String currentNum = String.valueOf(commentBean.getData().getTotal());
+                /*long totalNum = Long.parseLong(currentNum);
+                for (int i = 0; i < commentBean.getData().getTotal(); i++) {
+                    MyRequest.getSecondCommentData(hasFocusBean.getData().getRecords().get(position).getid(), commentBean.getData().getRecords().get(i).getid(), new CommentCallback() {
+                        @Override
+                        public void onSuccess(CommentBean commentBean) {
+                            String currentNum = String.valueOf(commentBean.getData().getTotal());
+                            long num = Long.parseLong(currentNum);
+                            totalNum = totalNum +num;
+                        }
+
+                        @Override
+                        public void onFailure(Throwable throwable) {
+
+                        }
+                    });
+                }
+*/
+                holder.itemCommentNum.setText(currentNum);
+
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                Log.e("TAG","无评论");
+
+            }
+        });
 
 
         holder.imgViewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
@@ -115,7 +151,8 @@ public class HomeFocusFragmentRecyclerViewAdapter extends RecyclerView.Adapter<H
         public TextView itemCollectNum;
         public TextView itemTitle;
         public TextView itemContent;
-        public TextView itemCommentArea;
+        public ImageView itemCommentArea;
+        public TextView itemCommentNum;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -130,7 +167,8 @@ public class HomeFocusFragmentRecyclerViewAdapter extends RecyclerView.Adapter<H
             itemCollectNum = itemView.findViewById(R.id.tv_home_focus_collect_number);
             itemTitle = itemView.findViewById(R.id.tv_home_focus_title);
             itemContent = itemView.findViewById(R.id.tv_home_focus_content);
-            itemCommentArea = itemView.findViewById(R.id.tv_home_focus_comment);
+            itemCommentArea = itemView.findViewById(R.id.iv_home_focus_comment);
+            itemCommentNum = itemView.findViewById(R.id.tv_home_focus_comment_number);
         }
     }
 
@@ -234,7 +272,7 @@ public class HomeFocusFragmentRecyclerViewAdapter extends RecyclerView.Adapter<H
     }
 
 
-    private void setOnCommentAreaOnClickListener (TextView commentArea,int position) {
+    private void setOnCommentAreaOnClickListener (ImageView commentArea, int position) {
         commentArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

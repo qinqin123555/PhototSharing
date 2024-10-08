@@ -146,11 +146,19 @@ public interface ApiInterface {
             @Query("focusUserId") long focusUserId,
             @Query("userId") long userId
     );
+    //    获取已经点赞的列表
+    @GET("api/member/photo/collect")
+    Call<HasFocusBean> getCollectInfo(
+            @Header("appId") String appId,
+            @Header("appSecret") String appSecret,
+            @Query("current") long current,
+            @Query("size") long size,
+            @Query("userId") long userId
+    );
 
 //    添加收藏
-//    添加关注
     @POST("api/member/photo/collect")
-    Call<AddCollectBean> getCollectInfo(
+    Call<AddCollectBean> setCollectInfo(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
             @Query("shareId") long shareId,
@@ -159,15 +167,25 @@ public interface ApiInterface {
 
 //    取消收藏
     @POST("api/member/photo/collect/cancel")
-    Call<AddCollectBean> getCollectCancelInfo(
+    Call<AddCollectBean> setCollectCancelInfo(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
             @Query("collectId") long collectId
     );
 
-//    添加点赞
+//    获取已经点赞的列表
+    @GET("api/member/photo/like")
+    Call<HasFocusBean> getLikeInfo(
+            @Header("appId") String appId,
+            @Header("appSecret") String appSecret,
+            @Query("current") long current,
+            @Query("size") long size,
+            @Query("userId") long userId
+    );
+
+    //    添加点赞
     @POST("api/member/photo/like")
-    Call<AddLikeBean> getLikeInfo(
+    Call<AddLikeBean> setLikeInfo(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
             @Query("shareId") long shareId,
@@ -177,7 +195,7 @@ public interface ApiInterface {
 //    取消点赞
 
     @POST("api/member/photo/like/cancel")
-    Call<AddLikeBean> getLikeCancelInfo(
+    Call<AddLikeBean> setLikeCancelInfo(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
             @Query("likeId") long likeId

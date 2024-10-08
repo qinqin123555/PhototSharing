@@ -102,11 +102,17 @@ public class HomeFragment extends Fragment {
     private void initData() {
         homeFragmentList = new ArrayList<>();
         homeItemTitles = new ArrayList<>();
+        HomeLikeFragment homeLikeFragment = HomeLikeFragment.newInstance(myUserId,myUserName);
         HomeFocusFragment homeFocusFragment = HomeFocusFragment.newInstance(myUserId,myUserName);
-        HomeFindFragment homeFindFragment2 = HomeFindFragment.newInstance(myUserName,myUserId);
+        HomeFindFragment homeFindFragment = HomeFindFragment.newInstance(myUserName,myUserId);
+        HomeCollectFragment homeCollectFragment = HomeCollectFragment.newInstance(myUserId,myUserName);
         homeFragmentList.add(homeFocusFragment);
-        homeFragmentList.add(homeFindFragment2);
+        homeFragmentList.add(homeLikeFragment);
+        homeFragmentList.add(homeCollectFragment);
+        homeFragmentList.add(homeFindFragment);
         homeItemTitles.add("关注");
+        homeItemTitles.add("喜欢");
+        homeItemTitles.add("收藏");
         homeItemTitles.add("发现");
 
     }

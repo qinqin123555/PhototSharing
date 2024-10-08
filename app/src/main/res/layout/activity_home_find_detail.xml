@@ -68,7 +68,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/home_child_detail_image_recycler_view"/>
 
 
