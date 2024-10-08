@@ -6,7 +6,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.phototsharing.activity.LoginActivity;
 import com.example.phototsharing.entity.AddCommentBean;
 import com.example.phototsharing.entity.AddCollectBean;
 import com.example.phototsharing.entity.CommentBean;
@@ -14,10 +13,16 @@ import com.example.phototsharing.entity.AddFocusBean;
 import com.example.phototsharing.entity.AddLikeBean;
 import com.example.phototsharing.entity.HasFocusBean;
 import com.example.phototsharing.entity.PersonBean;
+import com.example.phototsharing.entity.RegisterBean;
 import com.example.phototsharing.entity.ShareBean;
 import com.example.phototsharing.entity.ShareDetailBean;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,8 +41,6 @@ public class MyRequest {
     public static void login(String username, String password, LoginCallback callback) {
         ApiInterface myApi = MyRequest.request();
 
-        // 创建 LoginRequestBody 实例
-//        ApiInterface.LoginRequestBody requestBody = new ApiInterface.LoginRequestBody(username, password);
         Call<PersonBean> call = myApi.loginUser(
                 MyHeaders.getAppId(),
                 MyHeaders.getAppSecret(),
@@ -75,6 +78,69 @@ public class MyRequest {
             }
         });
     }
+
+    public static void register(String username, String password, RegisterCallback callback) {
+        ApiInterface myApi = MyRequest.request();
+
+        // 准备请求参数
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("username", username);
+            jsonObject.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            callback.onFailure(new Throwable("请求参数构造失败"));
+            return; // 退出方法以防止继续执行
+        }
+
+        // 创建 RequestBody
+        RequestBody requestBody = RequestBody.create(
+                MediaType.parse("application/json; charset=utf-8"),
+                jsonObject.toString() // 使用 jsonObject 而不是 requestBody
+        );
+
+        // 打印请求地址
+        Log.d("MyRequest", "请求地址: https://api-store.openguet.cn/api/member/photo/user/register");
+
+        // 打印请求参数
+        Log.d("MyRequest", "请求参数: " + jsonObject.toString());
+
+        // 打印请求头
+        Log.d("MyRequest", "Request Header: ");
+        Log.d("MyRequest", "Accept: application/json, text/plain, */*");
+        Log.d("MyRequest", "Content-Type: application/json");
+        Log.d("MyRequest", "appId: " + MyHeaders.getAppId());
+        Log.d("MyRequest", "appSecret: " + MyHeaders.getAppSecret());
+
+        // 调用接口时只需将请求体传递给 Retrofit
+        Call<RegisterBean> call = myApi.registerUser(
+                MyHeaders.getAppId(),
+                MyHeaders.getAppSecret(),
+                requestBody.toString() // 将创建的 requestBody 直接传递
+        );
+
+        // 执行异步请求
+        call.enqueue(new Callback<RegisterBean>() {
+            @Override
+            public void onResponse(@NonNull Call<RegisterBean> call, @NonNull Response<RegisterBean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getCode() == 200) {
+                        callback.onSuccess(response.body());
+                    } else {
+                        callback.onFailure(new Throwable("注册失败: " + response.body().getMsg()));
+                    }
+                } else {
+                    callback.onFailure(new Throwable("HTTP错误: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RegisterBean> call, @NonNull Throwable t) {
+                callback.onFailure(t);
+            }
+        });
+    }
+
 
 
     public static  void getShareBeanData(long userId,GetShareBeanCallback callback) {
