@@ -223,33 +223,31 @@ public class MyRequest {
     }
 
 //    新增一条一级评论
-public static void addFirstComment(Context context,String content, long shareId, long userId, String userName,TrueOrFalseCallback callback) {
-    ApiInterface myApi = MyRequest.request();
-    Call<AddCommentBean> call = myApi.setFirstComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(), content, shareId, userId, userName);
-    call.enqueue(new Callback<AddCommentBean>() {
-        @Override
-        public void onResponse(@NonNull Call<AddCommentBean> call, @NonNull Response<AddCommentBean> response) {
-            if (response.isSuccessful() && response.body() != null) {
-                if (response.body().getCode() == 200) {
-                    callback.onSuccess(true);
+    public static void addFirstComment(Context context,String content, long shareId, long userId, String userName,TrueOrFalseCallback callback) {
+        ApiInterface myApi = MyRequest.request();
+        Call<AddCommentBean> call = myApi.setFirstComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(), content, shareId, userId, userName);
+        call.enqueue(new Callback<AddCommentBean>() {
+            @Override
+            public void onResponse(@NonNull Call<AddCommentBean> call, @NonNull Response<AddCommentBean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getCode() == 200) {
+                        callback.onSuccess(true);
+                    } else {
+                        callback.onFailure(new Throwable("code = "+String.valueOf(response.body().getCode())+response.body().getMsg()));
+                        Toast.makeText(context,"评论失败",Toast.LENGTH_SHORT).show();
+
+                    }
                 } else {
-
-                    callback.onFailure(new Throwable("code = "+String.valueOf(response.body().getCode())+response.body().getMsg()));
-
+                    callback.onFailure(new Throwable("response失败"));
                     Toast.makeText(context,"评论失败",Toast.LENGTH_SHORT).show();
-
                 }
-            } else {
-                callback.onFailure(new Throwable("response失败"));
-                Toast.makeText(context,"评论失败",Toast.LENGTH_SHORT).show();
             }
-        }
-        @Override
-        public void onFailure(@NonNull Call<AddCommentBean> call, @NonNull Throwable t) {
-            callback.onFailure(t);
-        }
-    });
-}
+            @Override
+            public void onFailure(@NonNull Call<AddCommentBean> call, @NonNull Throwable t) {
+                callback.onFailure(t);
+            }
+        });
+    }
 
 
     //    新增一条二级评论
