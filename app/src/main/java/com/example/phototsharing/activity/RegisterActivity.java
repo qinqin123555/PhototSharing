@@ -1,16 +1,11 @@
 package com.example.phototsharing.activity;
 
-import static com.example.phototsharing.R.id.password_img2;
-
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Looper;
-import android.os.Message;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.Spannable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,18 +15,17 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.phototsharing.R;
+import com.example.phototsharing.entity.RegisterBean;
 import com.example.phototsharing.net.MyRequest;
-import com.example.phototsharing.net.URLS;
+import com.example.phototsharing.net.RegisterCallback;
 import com.example.phototsharing.utilis.KeyBoardUtil;
 
-import java.util.Map;
 import java.util.logging.Handler;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -134,10 +128,11 @@ public class RegisterActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (!editable.toString().equals("")) {
                     surePasswordClose.setVisibility(View.VISIBLE);
-                    String password = registerPassword.getText().toString(); // 获取注册密码
-                    if (password.equals(editable.toString())) {
+                    String password2 = registerPassword.getText().toString(); // 获取注册密码
+                    if (password2.equals(editable.toString())) {
                         // 密码一致，显示对应的图标
                         surePasswordEye.setImageResource(R.drawable.sure); // 密码一致图标
+                        password = password2;
                     } else {
                         // 密码不一致，显示对应的图标
                         surePasswordEye.setImageResource(R.drawable.close); // 密码不一致图标
@@ -151,6 +146,21 @@ public class RegisterActivity extends AppCompatActivity {
 
         // 注册按钮点击事件
         findViewById(R.id.register2).setOnClickListener(view -> {
+
+            MyRequest.register(account, password, new RegisterCallback() {
+                @Override
+                public void onSuccess(RegisterBean registerBean) {
+                    // 处理注册成功的逻辑
+                    Toast.makeText(getApplicationContext(), "注册成功", Toast.LENGTH_SHORT).show();
+                    // 例如，跳转到登录页面
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+                    // 处理注册失败的逻辑
+                    Toast.makeText(getApplicationContext(), "注册失败：" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
 
         });
 

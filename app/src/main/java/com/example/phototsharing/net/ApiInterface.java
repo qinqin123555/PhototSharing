@@ -7,10 +7,12 @@ import com.example.phototsharing.entity.AddFocusBean;
 import com.example.phototsharing.entity.AddLikeBean;
 import com.example.phototsharing.entity.HasFocusBean;
 import com.example.phototsharing.entity.PersonBean;
+import com.example.phototsharing.entity.RegisterBean;
 import com.example.phototsharing.entity.ShareBean;
 import com.example.phototsharing.entity.ShareDetailBean;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -28,6 +30,14 @@ public interface ApiInterface {
             @Header("appSecret") String appSecret,
             @Field("username") String username,
             @Field("password") String password
+    );
+
+    // 注册接口
+    @POST("api/member/photo/user/register")
+    Call<RegisterBean> registerUser(
+            @Header("appId") String appId,
+            @Header("appSecret") String appSecret,
+            @Body String requestBody // 这里使用 RequestBody 接收 JSON
     );
 
 
@@ -190,43 +200,5 @@ public interface ApiInterface {
             @Header("appSecret") String appSecret,
             @Query("likeId") long likeId
     );
-
-    public class LoginRequestBody {
-        @Override
-        public String toString() {
-            return "LoginRequestBody{" +
-                    "username='" + username + '\'' +
-                    ", password='" + password + '\'' +
-                    '}';
-        }
-
-        private String username;
-        private String password;
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-
-
-        public LoginRequestBody(String username, String password) {
-            this.username = username;
-            this.password = password;
-        }
-
-    }
-
 
 }
