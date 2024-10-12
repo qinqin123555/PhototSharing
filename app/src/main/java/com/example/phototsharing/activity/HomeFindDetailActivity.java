@@ -95,7 +95,7 @@ public class HomeFindDetailActivity extends AppCompatActivity {
         }
 
         //初始化一些参数
-        myContext = getApplicationContext();
+        myContext = HomeFindDetailActivity.this;
         homeChildDetailImageAdapter = new HomeChildDetailImageAdapter();
 //        homeChildDetailScrollView = findViewById(R.id.home_child_detail_scroll_view);
         homeChildDetailImageRecyclerView = findViewById(R.id.home_child_detail_image_recycler_view);
@@ -260,12 +260,22 @@ public class HomeFindDetailActivity extends AppCompatActivity {
                         Log.d("content",content);
 
                         if (!content.isEmpty()){
-                            MyRequest.addFirstComment(myContext,content,shareId,myUserId,myUserName);
+                            MyRequest.addFirstComment(myContext, content, shareId, myUserId, myUserName, new TrueOrFalseCallback() {
+                                @Override
+                                public void onSuccess(Boolean b) {
+                                    Toast.makeText(myContext,"评论成功",Toast.LENGTH_SHORT).show();
+
+                                }
+
+                                @Override
+                                public void onFailure(Throwable throwable) {
+                                    Toast.makeText(myContext,String.valueOf(throwable),Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
                     }
                 });
                 dialogWithKeyboard.showDialogWithKeyboard(HomeFindDetailActivity.this);
-
             }
         });
     }

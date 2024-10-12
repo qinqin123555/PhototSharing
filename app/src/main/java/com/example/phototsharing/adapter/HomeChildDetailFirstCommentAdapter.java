@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,11 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.phototsharing.R;
+import com.example.phototsharing.activity.HomeFindDetailActivity;
 import com.example.phototsharing.entity.CommentBean;
 import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.net.GetUserInfoCallback;
 import com.example.phototsharing.net.MyRequest;
 import com.example.phototsharing.net.CommentCallback;
+import com.example.phototsharing.net.TrueOrFalseCallback;
+import com.example.phototsharing.utilis.DialogWithKeyboard;
 
 import java.util.ArrayList;
 
@@ -29,6 +33,8 @@ public class HomeChildDetailFirstCommentAdapter extends RecyclerView.Adapter<Hom
     private Context myContext;
     private CommentBean myFirstCommentBean;
     private ArrayList<CommentBean> secondCommentBeanList;
+    private long myUserId;
+    private String myUserName;
 
     public HomeChildDetailFirstCommentAdapter(CommentBean commentBean,Context context){
         this.myFirstCommentBean = commentBean;
@@ -81,7 +87,9 @@ public class HomeChildDetailFirstCommentAdapter extends RecyclerView.Adapter<Hom
         MyRequest.getSecondCommentData(shareId, firstCommentId, new CommentCallback() {
             @Override
             public void onSuccess(CommentBean commentBean) {
-                HomeChildDetailSecondCommentAdapter homeChildDetailSecondCommentAdapter = new HomeChildDetailSecondCommentAdapter(commentBean,myContext);
+                long parentCommentId = myFirstCommentBean.getData().getRecords().get(position).getid();
+                long parentCommentUserId = myFirstCommentBean.getData().getRecords().get(position).getPUserId();
+                HomeChildDetailSecondCommentAdapter homeChildDetailSecondCommentAdapter = new HomeChildDetailSecondCommentAdapter(commentBean,myContext,parentCommentId,parentCommentUserId,myUserId,myUserName);
                 holder.secondCommentView.setAdapter(homeChildDetailSecondCommentAdapter);
                 holder.secondCommentView.setLayoutManager(new LinearLayoutManager(myContext,LinearLayoutManager.VERTICAL,false));
             }
@@ -93,28 +101,45 @@ public class HomeChildDetailFirstCommentAdapter extends RecyclerView.Adapter<Hom
 
 
 
-
-/*
 //       为一级评论设置点击监听
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context context = holder.itemView.getContext();
-                String content = showDialogWithKeyboard(context);
-                long parentCommentId = holder.itemView.;
-                long parentCommentUserId;
-                long replyCommentId;
-                long replyCommentUserId;
-                long shareId;
-                long userId;
-                String userName;
+                long parentCommentId = myFirstCommentBean.getData().getRecords().get(position).getid();
+                long parentCommentUserId = myFirstCommentBean.getData().getRecords().get(position).getPUserId();
+                long replyCommentId = myFirstCommentBean.getData().getRecords().get(position).getid();
+                long replyCommentUserId = myFirstCommentBean.getData().getRecords().get(position).getPUserId();
+                long shareId = myFirstCommentBean.getData().getRecords().get(position).getShareId();
 
-                MyRequest.addSecondComment(newCommentContent,);
 
-               Log.d("TAG","点击评论");
+                DialogWithKeyboard dialogWithKeyboard = new DialogWithKeyboard(new DialogWithKeyboard.OnSendClickListener() {
+                    @Override
+                    public void onSendClick(String content) {
+                        Log.d("TAG","点击发送评论");
+                        Log.d("content",content);
+
+                        if (!content.isEmpty()){
+                            MyRequest.addSecondComment(content, parentCommentId, parentCommentUserId, replyCommentId, replyCommentUserId, shareId, myUserId, myUserName, new TrueOrFalseCallback() {
+                                @Override
+                                public void onSuccess(Boolean b) {
+                                    Toast.makeText(myContext,"成功回复",Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onFailure(Throwable throwable) {
+                                    Toast.makeText(myContext,String.valueOf(throwable),Toast.LENGTH_SHORT).show();
+
+                                }
+                            });
+                        }
+                    }
+                });
+                dialogWithKeyboard.showDialogWithKeyboard(myContext);
+
+                Log.d("TAG","点击评论");
             }
         });
-*/
 
 
     }

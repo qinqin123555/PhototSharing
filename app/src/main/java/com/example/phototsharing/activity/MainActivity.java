@@ -20,6 +20,7 @@ import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.MyFragmentAdapter;
 import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.fragment.HomeFragment;
+import com.example.phototsharing.fragment.PersonalCenterFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -108,17 +109,14 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-
-
     private void initData() {
         myFragmentList = new ArrayList<>();
         HomeFragment homeFragment = HomeFragment.newInstance("首页",myUserName,myUserId);
         myFragmentList.add(homeFragment);
         HomeFragment fineFragment = HomeFragment.newInstance("发现",myUserName,myUserId);
-        HomeFragment mineFragment = HomeFragment.newInstance("我的",myUserName,myUserId);
+        PersonalCenterFragment mineFragment = PersonalCenterFragment.newInstance("我的",myUserName,myUserId);
         myFragmentList.add(fineFragment);
         myFragmentList.add(mineFragment);
-
 
     }
 }
