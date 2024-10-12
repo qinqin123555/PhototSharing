@@ -30,6 +30,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    buildFeatures {
+        dataBinding = true
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+
 }
 
 dependencies {
@@ -54,4 +61,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation("io.github.lucksiege:pictureselector:v3.10.6")
+    implementation("com.lwkandroid.library:NineGridView:2.1.0")
 }
