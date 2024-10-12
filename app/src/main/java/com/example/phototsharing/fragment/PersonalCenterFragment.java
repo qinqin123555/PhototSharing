@@ -1,14 +1,25 @@
 package com.example.phototsharing.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.phototsharing.R;
+import com.example.phototsharing.adapter.HomeFragmentAdapter;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,38 +28,32 @@ import com.example.phototsharing.R;
  */
 public class PersonalCenterFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "myUserName";
     private static final String ARG_PARAM3 = "myUserId";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private String mParam3;
+    private ViewPager2 homeViewPager;
+    private TabLayout homeTabLayout;
+    private List<Fragment> homeFragmentList;
+    private List<String> homeItemTitles;
+    private HomeFragmentAdapter homeFragmentAdapter;
 
     private long myUserId;
+    private String myUserName;
+
+
 
     public PersonalCenterFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PersonalCenterFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PersonalCenterFragment newInstance(String param1, String param2,long param3) {
+
+    public static PersonalCenterFragment newInstance(String title, String myUserName,long myUserId) {
         PersonalCenterFragment fragment = new PersonalCenterFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        args.putLong(ARG_PARAM3, param3);
+        args.putString(ARG_PARAM1, title);
+        args.putString(ARG_PARAM2, myUserName);
+        args.putLong(ARG_PARAM3,myUserId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,17 +61,52 @@ public class PersonalCenterFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-            mParam3 = getArguments().getString(ARG_PARAM3);
+            myUserId = getArguments().getLong("myUserId");
+            myUserName = getArguments().getString("myUserName");
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_personal_center, container, false);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        homeViewPager = view.findViewById(R.id.home_page);
+        homeTabLayout = view.findViewById(R.id.home_tab_layout);
+
+        initData();
+        homeFragmentAdapter = new HomeFragmentAdapter(getChildFragmentManager(),getLifecycle(),homeFragmentList,homeItemTitles);
+        homeViewPager.setAdapter(homeFragmentAdapter);
+        homeViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return true;
+            }
+        });
+        TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(homeTabLayout, homeViewPager,
+                (tab, position) -> tab.setText(homeItemTitles.get(position)));
+        tabLayoutMediator.attach();
+    }
+
+    private void initData() {
+        homeFragmentList = new ArrayList<>();
+        homeItemTitles = new ArrayList<>();
+        HomeLikeFragment homeLikeFragment = HomeLikeFragment.newInstance(myUserId,myUserName);
+        HomeFocusFragment homeFocusFragment = HomeFocusFragment.newInstance(myUserId,myUserName);
+        homeFragmentList.add(homeFocusFragment);
+        homeFragmentList.add(homeLikeFragment);
+        homeItemTitles.add("我的");
+        homeItemTitles.add("喜欢");
     }
 }
