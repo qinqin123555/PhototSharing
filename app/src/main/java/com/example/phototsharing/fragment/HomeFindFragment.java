@@ -38,6 +38,7 @@ public class HomeFindFragment extends Fragment {
 
 
 
+
     // TODO: Rename and change types and number of parameters
     public static HomeFindFragment newInstance(String myUserName,long myUserId) {
         HomeFindFragment fragment = new HomeFindFragment();

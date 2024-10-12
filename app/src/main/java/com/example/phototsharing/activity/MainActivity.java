@@ -37,6 +37,7 @@ public class MainActivity extends FragmentActivity {
     private List<Fragment> myFragmentList;
     private long myUserId;
     private String myUserName;
+    private int follow;
 
     @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility"})
     @Override
@@ -55,6 +56,7 @@ public class MainActivity extends FragmentActivity {
         if (receivedBundle != null) {
             myUserId = receivedBundle.getLong("myUserId");
             myUserName = receivedBundle.getString("myUserName");
+            follow = receivedBundle.getInt("total");
         }
 
         myViewPager = findViewById(R.id.viewpager);
@@ -115,7 +117,7 @@ public class MainActivity extends FragmentActivity {
         HomeFragment homeFragment = HomeFragment.newInstance("首页",myUserName,myUserId);
         myFragmentList.add(homeFragment);
         PublishFragment fineFragment = PublishFragment.newInstance("发现",myUserName,myUserId);
-        PersonalCenterFragment mineFragment = PersonalCenterFragment.newInstance("我的",myUserName,myUserId);
+        PersonalCenterFragment mineFragment = PersonalCenterFragment.newInstance("我的",myUserName,myUserId,follow);
         myFragmentList.add(fineFragment);
         myFragmentList.add(mineFragment);
 
