@@ -144,7 +144,7 @@ public class MyRequest {
 
     public static  void getShareBeanData(long userId,GetShareBeanCallback callback) {
         ApiInterface myApiInterface = MyRequest.request();
-        Call<ShareBean> call = myApiInterface.getFindInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),1,30,userId);
+        Call<ShareBean> call = myApiInterface.getFindInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),1,100,userId);
         call.enqueue(new Callback<ShareBean>() {
             @Override
             public void onResponse(@NonNull Call<ShareBean> call, @NonNull Response<ShareBean> response) {
@@ -206,7 +206,7 @@ public class MyRequest {
     // 注意：这里假设loadSecondCommentData已经被修改为接受一个回调接口
     public static void getFirstCommentData(long shareId, CommentCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<CommentBean> call = myApi.getFirstComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(), 1, shareId, 30);
+        Call<CommentBean> call = myApi.getFirstComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(), 1, shareId, 100);
         call.enqueue(new Callback<CommentBean>() {
             @Override
             public void onResponse(@NonNull Call<CommentBean> call, @NonNull Response<CommentBean> response) {
@@ -238,7 +238,7 @@ public class MyRequest {
     //    获取二级评论
     public static void getSecondCommentData(long shareId, long firstCommentId, CommentCallback callback) {
         ApiInterface myApi = MyRequest.request(); // 假设request()是你的Retrofit API接口的实例创建方法
-        Call<CommentBean> call = myApi.getSecondComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(), firstCommentId, 1, shareId, 30);
+        Call<CommentBean> call = myApi.getSecondComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(), firstCommentId, 1, shareId, 100);
         call.enqueue(new Callback<CommentBean>() {
             @Override
             public void onResponse(@NonNull Call<CommentBean> call, @NonNull Response<CommentBean> response) {
