@@ -156,7 +156,7 @@
                         android:layout_height="80dp"
                         android:contentDescription="@null"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/your_image_drawable" />
+                        android:src="@drawable/img" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
