@@ -2,6 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.PhototSharing" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">#DFE46161</item>
+<!--        <item name="colorPrimary">#742DE2</item>-->
+
         <item name="colorPrimaryVariant">#673AB7</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    cardCornerRadius="8dp"
+    cardCornerRadius="10dp"
     android:layout_margin="15dp">
 
     <RelativeLayout
@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="8dp"
+            android:layout_margin="15dp"
             tools:ignore="UselessParent">
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_home_focus_avatar"
@@ -31,7 +31,7 @@
                 android:layout_gravity="center_vertical"
                 android:text="username"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:layout_marginStart="15dp"/>
         </LinearLayout>
 
@@ -49,7 +49,7 @@
             android:orientation="horizontal"
             android:layout_below="@+id/focus_image_viewpager"
             android:layout_alignParentEnd="true"
-            android:layout_margin="8dp">
+            android:layout_margin="15dp">
             <ImageView
                 android:id="@+id/iv_home_focus_like"
                 android:layout_width="30dp"
@@ -113,14 +113,17 @@
             android:layout_below="@+id/divider"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_margin="8dp"/>
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="15dp"/>
 
         <TextView
             android:id="@+id/tv_home_focus_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_home_focus_title"
-            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="15dp"
             android:textSize="18sp" />
     </RelativeLayout>
 
