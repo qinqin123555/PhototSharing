@@ -26,7 +26,6 @@ public class PublishFragment extends Fragment {
     private String username;
     private long userId;
 
-    private EditText subTitleEditText;
     private EditText textContentEditText;
     private Button submitButton;
 
@@ -53,11 +52,9 @@ public class PublishFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_publish, container, false);
 
-        View view = inflater.inflate(R.layout.activity_submit, container, false);
-
-        subTitleEditText = view.findViewById(R.id.tv_title);
-        textContentEditText = view.findViewById(R.id.sub_title);
+        textContentEditText = view.findViewById(R.id.text);
         submitButton = view.findViewById(R.id.submit_button);
 
         submitButton.setOnClickListener(v -> publishContent());
@@ -66,17 +63,19 @@ public class PublishFragment extends Fragment {
     }
 
     private void publishContent() {
-        String titleInput = subTitleEditText.getText().toString().trim();
         String content = textContentEditText.getText().toString().trim();
 
-        if (TextUtils.isEmpty(titleInput) || TextUtils.isEmpty(content)) {
-            Toast.makeText(getContext(), "标题和内容不能为空", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(content)) {
+            Toast.makeText(getContext(), "正文不能为空", Toast.LENGTH_SHORT).show();
         } else {
-            Log.d("PublishFragment", "Title: " + titleInput);
-            Log.d("PublishFragment", "Content: " + content);
-            Log.d("PublishFragment", "User: " + username + " (ID: " + userId + ")");
+            Log.d("PublishFragment", "发布内容: " + content);
+            Log.d("PublishFragment", "发布者: " + username + " (ID: " + userId + ")");
             Toast.makeText(getContext(), "发布成功！", Toast.LENGTH_SHORT).show();
-
         }
+    }
+
+    // 接收 UploadFragment 传递的图片路径
+    public void updateWithImage(String imagePath) {
+        Log.d("PublishFragment", "接收到图片路径: " + imagePath);
     }
 }

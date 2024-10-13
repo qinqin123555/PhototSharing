@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -24,48 +25,41 @@ public class UploadFragment extends Fragment {
     private ActivityResultLauncher<Intent> pickImageLauncher;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // 为该片段填充布局
         View view = inflater.inflate(R.layout.fragment_upload, container, false);
 
-        // 获取布局中的 ImageView 和 LinearLayout
+        // 获取 ImageView 和点击文本
         imageView = view.findViewById(R.id.custom_image);
-        LinearLayout uploadLayout = view.findViewById(R.id.upload_layout);
+        TextView uploadText = view.findViewById(R.id.upload_text);
 
-        // 初始化图片选择器启动器
-        pickImageLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    // 当选择图片的结果返回时执行此处代码
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent data = result.getData();
-                        if (data != null) {
-                            Uri imageUri = data.getData();
-                            // 将选择的图片设置到 ImageView 中显示
-                            imageView.setImageURI(imageUri);
-                        }
-                    }
+        // 初始化图片选择器
+        pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                Intent data = result.getData();
+                if (data != null) {
+                    Uri imageUri = data.getData();
+                    imageView.setImageURI(imageUri);
+                    selectImage(imageUri.toString());
                 }
-        );
+            }
+        });
 
-        // 设置点击监听器，点击时打开图片选择器
-        uploadLayout.setOnClickListener(v -> openImagePicker());
+        // 设置点击事件来打开图片选择器
+        uploadText.setOnClickListener(v -> openImagePicker());
 
         return view;
     }
 
     private void openImagePicker() {
-        // 创建一个 Intent 来打开系统相册，选择图片
         Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*"); // 只显示图片类型
-        pickImageLauncher.launch(intent); // 启动选择器
+        intent.setType("image/*");
+        pickImageLauncher.launch(intent);
     }
-
 
     private OnUploadFragmentInteractionListener mListener;
 
-    // 定义接口
+    // 定义接口以通知 Activity 图片被选中
     public interface OnUploadFragmentInteractionListener {
         void onImageSelected(String imagePath);
     }
@@ -80,7 +74,6 @@ public class UploadFragment extends Fragment {
         }
     }
 
-    // 选择图片时调用
     private void selectImage(String imagePath) {
         if (mListener != null) {
             mListener.onImageSelected(imagePath);

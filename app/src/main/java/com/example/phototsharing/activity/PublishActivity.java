@@ -96,16 +96,17 @@ public class PublishActivity extends AppCompatActivity implements UploadFragment
 */
     }
 
-    private void loadUploadFragment() {
+ /*   private void UploadFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container); // 使用 fragment_container
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_upload); // 使用 fragment_container
         if (fragment == null) {
             fragment = new UploadFragment();
             fragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, fragment) // 使用 fragment_container
+                    .add(R.id.fragment_upload, fragment) // 使用 fragment_container
                     .commit();
         }
     }
+ */
 
 
 
