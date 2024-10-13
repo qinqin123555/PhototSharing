@@ -21,7 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.phototsharing.R;
-import com.example.phototsharing.databinding.ActivitySubmitBinding;
+//import com.example.phototsharing.databinding.ActivitySubmitBinding;
 import com.example.phototsharing.entity.ImageBean;
 import com.example.phototsharing.fragment.UploadFragment;
 import com.example.phototsharing.net.MyHeaders;
@@ -44,7 +44,7 @@ import okhttp3.Response;
 
 public class PublishActivity extends AppCompatActivity implements UploadFragment.OnUploadFragmentInteractionListener {
 
-    private ActivitySubmitBinding binding;
+   /* private ActivitySubmitBinding binding;
     private EditText sub_title;
     private EditText text;
     private String imageCode;
@@ -70,11 +70,11 @@ public class PublishActivity extends AppCompatActivity implements UploadFragment
             }
         }
     };
-
+*/
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivitySubmitBinding.inflate(getLayoutInflater());
+      /*  binding = ActivitySubmitBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_submit);
         View view = binding.getRoot();
         setContentView(view);
@@ -93,7 +93,7 @@ public class PublishActivity extends AppCompatActivity implements UploadFragment
 
         // 发布按钮点击事件
         binding.submitButton.setOnClickListener(view12 -> publish());
-
+*/
     }
 
     private void loadUploadFragment() {
@@ -108,9 +108,7 @@ public class PublishActivity extends AppCompatActivity implements UploadFragment
     }
 
 
-    /**
-     * 点击外部事件，关闭键盘
-     */
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
@@ -156,7 +154,7 @@ public class PublishActivity extends AppCompatActivity implements UploadFragment
 
     // 发布逻辑
     private void publish() {
-        Gson gson = new Gson();
+     /*   Gson gson = new Gson();
         String title = binding.subTitle.getText().toString();
 
         if (!title.equals("") && !text.equals("") && imageCode != null) {
@@ -194,12 +192,12 @@ public class PublishActivity extends AppCompatActivity implements UploadFragment
 
         } else {
             Toast.makeText(PublishActivity.this, "标题,内容和图片不能为空", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     // 保存逻辑
     private void save() {
-        Gson gson = new Gson();
+   /*     Gson gson = new Gson();
         String title = binding.subTitle.getText().toString();
 
         Map<String, Object> bodyMap = new HashMap<>();
@@ -232,11 +230,13 @@ public class PublishActivity extends AppCompatActivity implements UploadFragment
                     handler.sendMessage(msg);
                 }
             }
-        });
+        });*/
     }
 
     @Override
     public void onImageSelected(String imagePath) {
+/*
         imageCode = imagePath;  // 可以通过Fragment来回传数据，处理图片选择后的逻辑
+*/
     }
 }
