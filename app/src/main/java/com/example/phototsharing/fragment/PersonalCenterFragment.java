@@ -1,6 +1,7 @@
 package com.example.phototsharing.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -10,18 +11,23 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.HomeFocusFragmentRecyclerViewAdapter;
 import com.example.phototsharing.adapter.HomeFragmentAdapter;
 import com.example.phototsharing.entity.HasFocusBean;
+import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.net.GetFocusBeanCallback;
+import com.example.phototsharing.net.GetUserInfoCallback;
 import com.example.phototsharing.net.MyRequest;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -57,7 +63,8 @@ public class PersonalCenterFragment extends Fragment {
 
     // 新增：声明控件变量
     private CircleImageView avatar;
-    private TextView profileUserId, subscriptionNumber, fanNumber, thumbsupNumber;
+    private TextView profileUserId, subscriptionNumber, fanNumber, thumbsupNumber,personal_description;
+    private ImageView sexImageView;
 
     public PersonalCenterFragment() {
         // Required empty public constructor
@@ -85,6 +92,12 @@ public class PersonalCenterFragment extends Fragment {
         }
 
 
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        myContext = context; // 初始化 myContext
     }
 
     @Override
@@ -120,6 +133,8 @@ public class PersonalCenterFragment extends Fragment {
         subscriptionNumber = view.findViewById(R.id.subscription_number);
         fanNumber = view.findViewById(R.id.fan_number);
         thumbsupNumber = view.findViewById(R.id.thumbsup_number);
+        personal_description = view.findViewById(R.id.personal_description);
+        sexImageView = view.findViewById(R.id.sex);
 
         // 加载用户数据
         loadUserData();
@@ -144,15 +159,21 @@ public class PersonalCenterFragment extends Fragment {
             @Override
             public void onSuccess(HasFocusBean hasFocusBean) {
 
-                // 这里假设 `hasFocusBean` 中包含了关注数、粉丝数和获赞数
-                int subscriptions = (int) hasFocusBean.getData().getTotal();  // 关注数
-//                int fans = hasFocusBean.getFanCount();                    // 粉丝数
-//                int thumbsUp = hasFocusBean.getThumbsUpCount();           // 获赞数
+                myHasFocusBean = hasFocusBean;
 
-                // 更新视图控件的内容
-                subscriptionNumber.setText(String.valueOf(subscriptions));
-//                fanNumber.setText(String.valueOf(fans));
-//                thumbsupNumber.setText(String.valueOf(thumbsUp));
+                // 获取 records 列表
+                List<HasFocusBean.Data.Record> records = hasFocusBean.getData().getRecords();
+
+                // 统计 hasFocus 为 true 的数量
+                int focusCount = 0;
+                for (HasFocusBean.Data.Record record : records) {
+                    if (record.getHasFocus()) {
+                        focusCount++;
+                    }
+                }
+
+                // 将关注人数绑定到 TextView 上
+                subscriptionNumber.setText(String.valueOf(focusCount));
             }
 
             @Override
@@ -160,8 +181,43 @@ public class PersonalCenterFragment extends Fragment {
                 Toast.makeText(myContext, (CharSequence) throwable, Toast.LENGTH_SHORT).show();
             }
         });
+
+        MyRequest.getUserByName(myUserName, new GetUserInfoCallback() {
+            @Override
+            public void onSuccess(PersonBean personBean) {
+                // 获取头像的 URL
+                String avatarUrl = personBean.getData().getAvatar();
+                String bio = personBean.getData().getIntroduce();  // 获取简介
+                int gender = personBean.getData().getSex();  // 获取性别
+
+                // 使用 Glide 加载头像到 CircleImageView (avatar)
+                if (isAdded()) {
+                    Glide.with(requireContext())
+                            .load(avatarUrl)  // 加载 URL
+                            .placeholder(R.drawable.avatar)  // 占位图，可以是默认头像
+                            .error(R.drawable.avatar)  // 错误时显示的图片
+                            .into(avatar);  // 设置到 CircleImageView 组件上
+                }
+
+                personal_description.setText(bio);
+                profileUserId.setText(myUserName);
+
+                // 判断性别并设置相应的图片
+                if (gender == 0) {
+                    // 如果性别是 0（女性），设置为女性图片
+                    sexImageView.setImageResource(R.drawable.woman);
+                } else if (gender == 1) {
+                    // 如果性别是 1（男性），设置为男性图片
+                    sexImageView.setImageResource(R.drawable.man);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                Toast.makeText(myContext, "获取用户信息失败", Toast.LENGTH_SHORT).show();
+                Log.e("PersonalCenterFragment", "无头像", throwable);
+            }
+        });
     }
-
-
-
 }

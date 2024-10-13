@@ -32,7 +32,7 @@ public class PersonBean {
     public static class Data {
         private String createTime;
         private String introduce;
-        private long sex;
+        private int sex;
         private String appKey;
         private long id;
         private String avatar;
@@ -45,8 +45,8 @@ public class PersonBean {
         public String getIntroduce() { return introduce; }
         public void setIntroduce(String value) { this.introduce = value; }
 
-        public long getSex() { return sex; }
-        public void setSex(long value) { this.sex = value; }
+        public int getSex() { return sex; }
+        public void setSex(int value) { this.sex = value; }
 
         public String getAppKey() { return appKey; }
         public void setAppKey(String value) { this.appKey = value; }
