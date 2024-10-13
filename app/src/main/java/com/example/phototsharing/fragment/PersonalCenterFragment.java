@@ -259,17 +259,17 @@ public class PersonalCenterFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.home_topbar_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId(); // 获取传入的菜单项 ID
-        Log.d("PersonalCenterFragment", "Selected item ID: " + itemId); // 打印菜单项 ID
-
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//        inflater.inflate(R.menu.home_topbar_menu, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        int itemId = item.getItemId(); // 获取传入的菜单项 ID
+//        Log.d("PersonalCenterFragment", "Selected item ID: " + itemId); // 打印菜单项 ID
+//
 //        switch (item.getItemId()) {
 //            case R.id.change_info:
 //                // 处理更改信息的逻辑
@@ -283,8 +283,8 @@ public class PersonalCenterFragment extends Fragment {
 //            default:
 //                return super.onOptionsItemSelected(item);
 //        }
-
-        return false;
-    }
+//
+//        return false;
+//    }
 
 }
