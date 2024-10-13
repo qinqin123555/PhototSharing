@@ -18,8 +18,9 @@
         android:id="@+id/btm_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:background="@color/white"
-        app:menu="@menu/bottom_nav_menu" />
-
+        app:menu="@menu/bottom_nav_menu"
+        app:itemRippleColor="@color/colorPrimary"
+        tools:ignore="ObsoleteLayoutParam" />
 </LinearLayout>

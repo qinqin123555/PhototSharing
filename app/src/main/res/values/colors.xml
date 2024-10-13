@@ -12,4 +12,5 @@
     <color name="gray">#F0F0F0</color>
     <color name="divider">#DDDDDD</color>
     <color name="gray_2">#DFD9E0</color>
+    <color name="colorPrimary">#DFE46161</color>
 </resources>

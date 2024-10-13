@@ -56,9 +56,9 @@ public class PublishFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_submit, container, false);
 
-        subTitleEditText = view.findViewById(R.id.sub_title);
-        textContentEditText = view.findViewById(R.id.text);
-        submitButton = view.findViewById(R.id.submit_button_bottom);
+        subTitleEditText = view.findViewById(R.id.tv_title);
+        textContentEditText = view.findViewById(R.id.sub_title);
+        submitButton = view.findViewById(R.id.submit_button);
 
         submitButton.setOnClickListener(v -> publishContent());
 
