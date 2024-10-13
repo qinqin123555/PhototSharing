@@ -9,10 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import android.view.MenuItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +48,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * create an instance of this fragment.
  */
 public class PersonalCenterFragment extends Fragment {
+
+    View rootView;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "myUserName";
@@ -63,7 +70,7 @@ public class PersonalCenterFragment extends Fragment {
 
     // 新增：声明控件变量
     private CircleImageView avatar;
-    private TextView profileUserId, subscriptionNumber, fanNumber, thumbsupNumber,personal_description;
+    private TextView profileUserId, subscriptionNumber, fanNumber, thumbsupNumber, personal_description;
     private ImageView sexImageView;
 
     public PersonalCenterFragment() {
@@ -71,12 +78,12 @@ public class PersonalCenterFragment extends Fragment {
     }
 
 
-    public static PersonalCenterFragment newInstance(String title, String myUserName,long myUserId,int follow) {
+    public static PersonalCenterFragment newInstance(String title, String myUserName, long myUserId, int follow) {
         PersonalCenterFragment fragment = new PersonalCenterFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, title);
         args.putString(ARG_PARAM2, myUserName);
-        args.putLong(ARG_PARAM3,myUserId);
+        args.putLong(ARG_PARAM3, myUserId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -103,7 +110,12 @@ public class PersonalCenterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_personal_center, container, false);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_personal_center, container, false);
+        }
+
+
+        return rootView;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -111,11 +123,13 @@ public class PersonalCenterFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setHasOptionsMenu(true);
+
         homeViewPager = view.findViewById(R.id.home_page);
         homeTabLayout = view.findViewById(R.id.home_tab_layout);
 
         initData();
-        homeFragmentAdapter = new HomeFragmentAdapter(getChildFragmentManager(),getLifecycle(),homeFragmentList,homeItemTitles);
+        homeFragmentAdapter = new HomeFragmentAdapter(getChildFragmentManager(), getLifecycle(), homeFragmentList, homeItemTitles);
         homeViewPager.setAdapter(homeFragmentAdapter);
 //        homeViewPager.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
@@ -139,17 +153,40 @@ public class PersonalCenterFragment extends Fragment {
         // 加载用户数据
         loadUserData();
 
+        // 如果有需要，还可以设置SwipeRefreshLayout的刷新监听器
+//        SwipeRefreshLayout swipeRefreshLayout = rootView.findViewById(R.id.swipe_refresh_layout);
+//        swipeRefreshLayout.setOnRefreshListener(() -> {
+//            // 更新适配器数据
+//            loadUserData();
+//            swipeRefreshLayout.setRefreshing(false);
+//        });
+
+        // 设置下拉刷新监听器
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                loadUserData();;
+//            }
+//        });
+
     }
 
     private void initData() {
         homeFragmentList = new ArrayList<>();
         homeItemTitles = new ArrayList<>();
-        HomeLikeFragment homeLikeFragment = HomeLikeFragment.newInstance(myUserId,myUserName);
-        HomeFocusFragment homeFocusFragment = HomeFocusFragment.newInstance(myUserId,myUserName);
+        HomeLikeFragment homeLikeFragment = HomeLikeFragment.newInstance(myUserId, myUserName);
+        HomeFocusFragment homeFocusFragment = HomeFocusFragment.newInstance(myUserId, myUserName);
         homeFragmentList.add(homeFocusFragment);
         homeFragmentList.add(homeLikeFragment);
         homeItemTitles.add("我的");
         homeItemTitles.add("喜欢");
+        // 滚动到顶部
+//        if (homeViewPager.getChildAt(0) instanceof RecyclerView) {
+//            RecyclerView recyclerView = (RecyclerView) homeViewPager.getChildAt(0);
+//            if (recyclerView.getLayoutManager() != null) {
+//                recyclerView.getLayoutManager().scrollToPosition(0);
+//            }
+//        }
     }
 
     //加载用户数据的方法
@@ -211,6 +248,7 @@ public class PersonalCenterFragment extends Fragment {
                     sexImageView.setImageResource(R.drawable.man);
                 }
 
+
             }
 
             @Override
@@ -220,4 +258,33 @@ public class PersonalCenterFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.home_topbar_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId(); // 获取传入的菜单项 ID
+        Log.d("PersonalCenterFragment", "Selected item ID: " + itemId); // 打印菜单项 ID
+
+//        switch (item.getItemId()) {
+//            case R.id.change_info:
+//                // 处理更改信息的逻辑
+//                Toast.makeText(myContext, "更改信息", Toast.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.back_login:
+//                // 处理登出的逻辑
+//                Toast.makeText(myContext, "登出", Toast.LENGTH_SHORT).show();
+//                // 可以执行跳转到登录页面的逻辑
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+
+        return false;
+    }
+
 }
