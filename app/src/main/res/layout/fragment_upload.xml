@@ -1,39 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
     android:padding="16dp">
 
-    <!-- 图片展示视图 -->
     <ImageView
         android:id="@+id/custom_image"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="已选图片"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_placeholder_image"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/upload_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintDimensionRatio="1:1" />
+        android:src="@drawable/ic_placeholder_image"/>
 
-    <!-- 点击上传的文本 -->
     <TextView
-        android:id="@+id/upload_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="点击上传图片"
-        android:textSize="18sp"
-        android:textColor="?attr/colorPrimary"
-        android:textStyle="bold"
-        android:drawableLeft="@drawable/ic_upload"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/custom_image"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"/>
+</LinearLayout>

@@ -17,11 +17,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.MyFragmentAdapter;
-<<<<<<< HEAD
-=======
 import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.fragment.AddShareFragment;
->>>>>>> b0c0348 (发布2)
 import com.example.phototsharing.fragment.HomeFragment;
 import com.example.phototsharing.fragment.PersonalCenterFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -117,11 +114,12 @@ public class MainActivity extends FragmentActivity {
         myFragmentList = new ArrayList<>();
         HomeFragment homeFragment = HomeFragment.newInstance("首页",myUserName,myUserId);
         myFragmentList.add(homeFragment);
-<<<<<<< HEAD
+
         //AddShareFragment fineFragment = AddShareFragment.newInstance("发现",myUserName,myUserId);
-=======
-        AddShareFragment fineFragment = AddShareFragment.newInstance("发现",myUserName,myUserId);
->>>>>>> b0c0348 (发布2)
+
+        AddShareFragment fineFragment = AddShareFragment.newInstance("发布",myUserName,myUserId);
+        myFragmentList.add(fineFragment);
+
         PersonalCenterFragment mineFragment = PersonalCenterFragment.newInstance("我的",myUserName,myUserId,follow);
         //myFragmentList.add(fineFragment);
         myFragmentList.add(mineFragment);

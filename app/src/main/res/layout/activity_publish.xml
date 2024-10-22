@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.PublishActivity">
 
     <!-- 工具栏 -->
@@ -12,8 +11,8 @@
         android:id="@+id/submit_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="?attr/colorPrimary">
+        android:background="?attr/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,101 +24,25 @@
             android:textStyle="bold"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- 标题文本 -->
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
+    <!-- Fragment 容器：PublishFragment -->
+    <FrameLayout
+        android:id="@+id/publish_fragment_container"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="填写标题会有更多赞哦~"
-        android:textSize="18sp"
-        android:textColor="#333"
         app:layout_constraintTop_toBottomOf="@id/submit_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="32dp"/>
 
-    <!-- 子标题编辑框 -->
-    <EditText
-        android:id="@+id/text"
+    <!-- Fragment 容器：UploadFragment -->
+    <FrameLayout
+        android:id="@+id/upload_fragment_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="添加正文"
-        android:textSize="18sp"
-        android:padding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/publish_fragment_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/edittext_background"/>
-
-    <!-- 图片上传部分 -->
-    <LinearLayout
-        android:id="@+id/upload_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
-
-        <ImageView
-            android:id="@+id/custom_image"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_placeholder_image"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="点击上传图片"
-            android:textSize="16sp"
-            android:textColor="#333"
-            android:layout_marginTop="10dp"/>
-    </LinearLayout>
-
-    <!-- 发布 Fragment 容器 -->
-    <FrameLayout
-        android:id="@+id/publish_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/upload_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- 发布按钮 -->
-    <Button
-        android:id="@+id/submit_button"
-        android:layout_width="146dp"
-        android:layout_height="69dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="?attr/colorPrimary"
-        android:text="发布"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.12"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/publish_fragment_container"
-        app:layout_constraintVertical_bias="0.79" />
-
-    <!-- 保存草稿按钮 -->
-    <Button
-        android:id="@+id/draft_button"
-        android:layout_width="146dp"
-        android:layout_height="69dp"
-        android:backgroundTint="?attr/colorAccent"
-        android:text="保存草稿"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.879"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="609dp" />
-
+        android:layout_marginTop="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -61,7 +61,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class AddShareFragment extends Fragment {
-    private static final int REQUEST_CODE_PICK_IMAGE = 1;
+
+/*    private static final int REQUEST_CODE_PICK_IMAGE = 1;
     private Button button;
     private TextView addShare;
     private TextView saveOrDelete;
@@ -148,14 +149,14 @@ public class AddShareFragment extends Fragment {
 
         }
     };
-
+*/
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // 替换这里的布局为你的Fragment布局
-        return inflater.inflate(R.layout.fragment_add_share, container, false);
+        return inflater.inflate(R.layout.activity_publish, container, false);
 
     }
-
+/*
     @Override//页面初始化
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -358,7 +359,7 @@ public class AddShareFragment extends Fragment {
                 Headers headers = new Headers.Builder()
                         .add("appId", Constants.USER_APPID)
                         .add("appSecret", Constants.USER_APPSECRET)
-                        .add("Accept", "application/json, text/plain, */*")
+                        .add("Accept", "application/json, text/plain, *//*")
                         .build();
 
                 // 构造请求体
@@ -413,7 +414,7 @@ public class AddShareFragment extends Fragment {
             Headers headers = new Headers.Builder()
                     .add("appId", Constants.USER_APPID)
                     .add("appSecret", Constants.USER_APPSECRET)
-                    .add("Accept", "application/json, text/plain, */*")
+                    .add("Accept", "application/json, text/plain, *//*")
                     .build();
 
             // 请求体
@@ -451,7 +452,7 @@ public class AddShareFragment extends Fragment {
             Headers headers = new Headers.Builder()
                     .add("appId", Constants.USER_APPID)
                     .add("appSecret", Constants.USER_APPSECRET)
-                    .add("Accept", "application/json, text/plain, */*")
+                    .add("Accept", "application/json, text/plain, *//*")
                     .build();
 
 
@@ -477,6 +478,8 @@ public class AddShareFragment extends Fragment {
     /**
      * 回调
      */
+
+/*test21
     private final Callback callback = new Callback() {
         @Override
         public void onFailure(@NonNull Call call, IOException e) {
@@ -571,8 +574,11 @@ public class AddShareFragment extends Fragment {
 //        return uri;
 //    }
 
+
+*/
+
     // 创建一个新的实例并设置参数
-//    public static AddShareFragment newInstance(String[] urlList , String title , String content , String imageCode , String shareId)
+//    public static AddShareFragment newInstance(String[] urlList , String title , String content , String imageCode , String shareId){
       public static AddShareFragment newInstance(String title, String myUserName, long myUserId){
         AddShareFragment fragment = new AddShareFragment();
         Bundle args = new Bundle();

@@ -64,12 +64,9 @@ public class PublishFragment extends Fragment {
 
     private void publishContent() {
         String content = textContentEditText.getText().toString().trim();
-
         if (TextUtils.isEmpty(content)) {
             Toast.makeText(getContext(), "正文不能为空", Toast.LENGTH_SHORT).show();
         } else {
-            Log.d("PublishFragment", "发布内容: " + content);
-            Log.d("PublishFragment", "发布者: " + username + " (ID: " + userId + ")");
             Toast.makeText(getContext(), "发布成功！", Toast.LENGTH_SHORT).show();
         }
     }

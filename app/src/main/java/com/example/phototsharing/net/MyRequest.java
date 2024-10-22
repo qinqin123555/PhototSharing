@@ -12,6 +12,7 @@ import com.example.phototsharing.entity.CommentBean;
 import com.example.phototsharing.entity.AddFocusBean;
 import com.example.phototsharing.entity.AddLikeBean;
 import com.example.phototsharing.entity.HasFocusBean;
+import com.example.phototsharing.entity.ImageBean;
 import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.entity.RegisterBean;
 import com.example.phototsharing.entity.ShareBean;
@@ -20,16 +21,20 @@ import com.example.phototsharing.entity.ShareDetailBean;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import okhttp3.*;
 
 public class MyRequest {
     public static ApiInterface request() {
@@ -591,6 +596,61 @@ public class MyRequest {
             }
         });
     }
+
+
+    public static void uploadImage(File file, String description, UploadCallback callback) {
+        ApiInterface myApi = MyRequest.request();
+
+        // 创建描述的 RequestBody
+        RequestBody descriptionBody = RequestBody.create(description, MediaType.parse("text/plain"));
+
+        // 创建文件的 RequestBody
+        RequestBody fileBody = RequestBody.create(file, MediaType.parse("image/jpeg"));
+
+        // 使用 MultipartBody.Part 封装文件
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), fileBody);
+
+        // 打印请求地址
+        Log.d("MyRequest", "请求地址: https://api-store.openguet.cn/api/member/photo/upload");
+
+        // 打印请求参数
+        Log.d("MyRequest", "请求参数: 文件名 = " + file.getName() + ", 描述 = " + description);
+
+        // 打印请求头
+        Log.d("MyRequest", "Request Header: ");
+        Log.d("MyRequest", "appId: " + MyHeaders.getAppId());
+        Log.d("MyRequest", "appSecret: " + MyHeaders.getAppSecret());
+
+        // 调用接口上传图片
+        Call<ImageBean> call = myApi.uploadImage(
+                MyHeaders.getAppId(),
+                MyHeaders.getAppSecret(),
+                filePart,
+                descriptionBody
+        );
+
+        // 执行异步请求
+        call.enqueue(new Callback<ImageBean>() {
+            @Override
+            public void onResponse(@NonNull Call<ImageBean> call, @NonNull Response<ImageBean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().getCode() == 200) {
+                        callback.onSuccess(response.body());
+                    } else {
+                        callback.onFailure(new Throwable("上传失败: " + response.body().getMsg()));
+                    }
+                } else {
+                    callback.onFailure(new Throwable("HTTP错误: " + response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ImageBean> call, @NonNull Throwable t) {
+                callback.onFailure(t);
+            }
+        });
+    }
+
 
 
 }

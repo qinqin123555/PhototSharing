@@ -11,42 +11,31 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.phototsharing.R;
 
 public class UploadFragment extends Fragment {
 
-    private ImageView imageView;
+    private ImageView uploadImageView;
     private ActivityResultLauncher<Intent> pickImageLauncher;
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // 为该片段填充布局
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_upload, container, false);
 
-        // 获取 ImageView 和点击文本
-        imageView = view.findViewById(R.id.custom_image);
-        TextView uploadText = view.findViewById(R.id.upload_text);
-
-        // 初始化图片选择器
-        pickImageLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == Activity.RESULT_OK) {
-                Intent data = result.getData();
-                if (data != null) {
-                    Uri imageUri = data.getData();
-                    imageView.setImageURI(imageUri);
-                    selectImage(imageUri.toString());
-                }
-            }
+        uploadImageView = view.findViewById(R.id.custom_image);
+        uploadImageView.setOnClickListener(v -> {
+            // 启动上传图片逻辑
+            Toast.makeText(getContext(), "上传图片功能", Toast.LENGTH_SHORT).show();
         });
-
-        // 设置点击事件来打开图片选择器
-        uploadText.setOnClickListener(v -> openImagePicker());
 
         return view;
     }

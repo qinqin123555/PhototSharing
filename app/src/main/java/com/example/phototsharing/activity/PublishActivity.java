@@ -1,38 +1,32 @@
 package com.example.phototsharing.activity;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.phototsharing.R;
-//import com.example.phototsharing.databinding.ActivitySubmitBinding;
+import com.example.phototsharing.databinding.ActivityPublishBinding;
 import com.example.phototsharing.entity.ImageBean;
+import com.example.phototsharing.fragment.PublishFragment;
 import com.example.phototsharing.fragment.UploadFragment;
+import com.example.phototsharing.net.ImageUploader;
 import com.example.phototsharing.net.MyHeaders;
 import com.example.phototsharing.net.URLS;
+import com.example.phototsharing.net.UploadCallback;
 import com.example.phototsharing.utilis.SharedPreferencesUtil;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -44,130 +38,51 @@ import okhttp3.Response;
 
 public class PublishActivity extends AppCompatActivity implements UploadFragment.OnUploadFragmentInteractionListener {
 
-   /* private ActivitySubmitBinding binding;
-    private EditText sub_title;
-    private EditText text;
-    private String imageCode;
+    private ActivityPublishBinding binding;
+    private String imageCode;  // 用来保存选中的图片路径
+    private EditText titleEditText, contentEditText;
 
-    // Handle处理toast显示消息
-    Handler handler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            switch (msg.what) {
-                case 1:
-                    ImageBean imageBean = (ImageBean) msg.obj;
-                    // 获取图片编码信息
-                    imageCode = imageBean.getData().getImageCode();
-                    break;
-                case 2:
-                    Toast.makeText(PublishActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-                    finish();
-                    break;
-                case 3:
-                    Toast.makeText(PublishActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-                    finish();
-                    break;
-            }
-        }
-    };
-*/
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      /*  binding = ActivitySubmitBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.activity_submit);
-        View view = binding.getRoot();
-        setContentView(view);
+        setContentView(R.layout.activity_publish);
 
-        // 隐藏ActionBar
-        Objects.requireNonNull(getSupportActionBar()).hide();
-
-        sub_title = binding.subTitle;
-        text = binding.subTitle;
-
-        // 设置工具栏的导航按钮点击事件
-        binding.submitToolbar.setNavigationOnClickListener(view1 -> showExitDialog("提示", "是否保存草稿再退出？", "是", "否", true));
-
-        // 加载 UploadFragment 到当前的 PublishActivity
-        loadUploadFragment();
-
-        // 发布按钮点击事件
-        binding.submitButton.setOnClickListener(view12 -> publish());
-*/
-    }
-
- /*   private void UploadFragment() {
+        // 加载 PublishFragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_upload); // 使用 fragment_container
-        if (fragment == null) {
-            fragment = new UploadFragment();
-            fragmentManager.beginTransaction()
-                    .add(R.id.fragment_upload, fragment) // 使用 fragment_container
-                    .commit();
-        }
-    }
- */
-
-
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if (isShouldHideInput(v, ev)) {
-                InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    assert v != null;
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-            return super.dispatchTouchEvent(ev);
-        }
-        return getWindow().superDispatchTouchEvent(ev) || onTouchEvent(ev);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.publish_fragment_container, new PublishFragment());
+        transaction.replace(R.id.upload_fragment_container, new UploadFragment());
+        transaction.commit();
     }
 
-    public boolean isShouldHideInput(View v, MotionEvent event) {
-        if (v != null && (v instanceof EditText)) {
-            int[] leftTop = {0, 0};
-            v.getLocationInWindow(leftTop);
-            int left = leftTop[0];
-            int top = leftTop[1];
-            int bottom = top + v.getHeight();
-            int right = left + v.getWidth();
-            return !(event.getX() > left && event.getX() < right && event.getY() > top && event.getY() < bottom);
-        }
-        return false;
-    }
-
-    // 弹窗显示内容
-    private void showExitDialog(String title, String message, String first, String second, boolean flag) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(second, (dialogInterface, i) -> {
-                    if (flag) finish();
-                })
-                .setNegativeButton(first, (dialogInterface, i) -> {
-                    if (flag) save();
-                })
-                .show();
+    // 加载上传图片的 Fragment
+    private void loadUploadFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        UploadFragment uploadFragment = new UploadFragment();
+        fragmentManager.beginTransaction()
+                .add(R.id.publish_fragment_container, uploadFragment)
+                .commit();
     }
 
     // 发布逻辑
     private void publish() {
-     /*   Gson gson = new Gson();
-        String title = binding.subTitle.getText().toString();
+        String title = titleEditText.getText().toString();
+        String content = contentEditText.getText().toString();
 
-        if (!title.equals("") && !text.equals("") && imageCode != null) {
+        // 确保标题、正文和图片都不为空
+        if (!title.isEmpty() && !content.isEmpty() && imageCode != null) {
             Map<String, Object> bodyMap = new HashMap<>();
-            bodyMap.put("content", text);
-            bodyMap.put("imageCode", imageCode);
-            bodyMap.put("pUserId", SharedPreferencesUtil.getValue(PublishActivity.this, "id"));
             bodyMap.put("title", title);
+            bodyMap.put("content", content);
+            bodyMap.put("imageCode", imageCode);
+            bodyMap.put("pUserId", SharedPreferencesUtil.getValue(this, "id"));
 
+            // 将数据转换为 JSON 格式
+            Gson gson = new Gson();
             String json = gson.toJson(bodyMap);
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
 
+            // 发送发布请求
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(URLS.ADD_SHARE.getUrl())
@@ -178,35 +93,37 @@ public class PublishActivity extends AppCompatActivity implements UploadFragment
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    e.printStackTrace();
+                    runOnUiThread(() -> Toast.makeText(PublishActivity.this, "发布失败", Toast.LENGTH_SHORT).show());
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {
-                        Message msg = new Message();
-                        msg.what = 2;
-                        handler.sendMessage(msg);
+                        runOnUiThread(() -> {
+                            Toast.makeText(PublishActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                            finish();  // 关闭当前 Activity
+                        });
                     }
                 }
             });
 
         } else {
-            Toast.makeText(PublishActivity.this, "标题,内容和图片不能为空", Toast.LENGTH_SHORT).show();
-        }*/
+            Toast.makeText(this, "标题、内容和图片不能为空", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    // 保存逻辑
-    private void save() {
-   /*     Gson gson = new Gson();
-        String title = binding.subTitle.getText().toString();
+    // 保存草稿逻辑
+    private void saveDraft() {
+        String title = titleEditText.getText().toString();
+        String content = contentEditText.getText().toString();
 
         Map<String, Object> bodyMap = new HashMap<>();
-        bodyMap.put("content", text);
-        bodyMap.put("imageCode", imageCode);
-        bodyMap.put("pUserId", SharedPreferencesUtil.getValue(PublishActivity.this, "id"));
         bodyMap.put("title", title);
+        bodyMap.put("content", content);
+        bodyMap.put("imageCode", imageCode);
+        bodyMap.put("pUserId", SharedPreferencesUtil.getValue(this, "id"));
 
+        Gson gson = new Gson();
         String json = gson.toJson(bodyMap);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
 
@@ -220,24 +137,51 @@ public class PublishActivity extends AppCompatActivity implements UploadFragment
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(PublishActivity.this, "草稿保存失败", Toast.LENGTH_SHORT).show());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    Message msg = new Message();
-                    msg.what = 3;
-                    handler.sendMessage(msg);
+                    runOnUiThread(() -> {
+                        Toast.makeText(PublishActivity.this, "草稿保存成功", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
                 }
             }
-        });*/
+        });
     }
 
+    // Fragment 回调，获取选中的图片路径，并上传图片
     @Override
     public void onImageSelected(String imagePath) {
-/*
-        imageCode = imagePath;  // 可以通过Fragment来回传数据，处理图片选择后的逻辑
-*/
+        File imageFile = new File(imagePath);
+        String fileType = "image/jpeg";  // 假设上传的图片类型为 JPEG
+
+        // 上传图片
+        ImageUploader imageUploader = new ImageUploader();
+        imageUploader.uploadImage(imageFile, fileType, new UploadCallback() {
+            @Override
+            public void onSuccess(ImageBean imageBean) {
+                // 获取上传成功的 imageCode
+                long imageCode = imageBean.getData().getImageCode();  // imageCode 是 long 类型
+
+                // 如果你需要把 long 转换为 String：
+                String imageCodeStr = String.valueOf(imageCode);
+
+                runOnUiThread(() -> {
+                    Toast.makeText(PublishActivity.this, "图片上传成功, 图片代码: " + imageCodeStr, Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                runOnUiThread(() -> {
+                    Toast.makeText(PublishActivity.this, "图片上传失败: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
     }
+
+
 }

@@ -1,21 +1,12 @@
 package com.example.phototsharing.entity;
-
 import java.util.List;
 
 public class ImageBean {
-
-    private int code;
     private String msg;
-    private DataBean data;
+    private long code;
+    private Data data;
 
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
+    // Getter and Setter
     public String getMsg() {
         return msg;
     }
@@ -24,44 +15,65 @@ public class ImageBean {
         this.msg = msg;
     }
 
-    public DataBean getData() {
+    public long getCode() {
+        return code;
+    }
+
+    public void setCode(long code) {
+        this.code = code;
+    }
+
+    public Data getData() {
         return data;
     }
 
-    public void setData(DataBean data) {
+    public void setData(Data data) {
         this.data = data;
     }
 
-    public static class DataBean {
-        private String imageCode;  // 改为 String 类型
-        private List<ImageUrl> imageUrlList;
 
-        public String getImageCode() {
-            return imageCode;
-        }
+    public static class Data {
+        private List<ImageUrlList> imageUrlList;
+        private long imageCode;
 
-        public void setImageCode(String imageCode) {
-            this.imageCode = imageCode;
-        }
-
-        public List<ImageUrl> getImageUrlList() {
+        // Getter and Setter
+        public List<ImageUrlList> getImageUrlList() {
             return imageUrlList;
         }
 
-        public void setImageUrlList(List<ImageUrl> imageUrlList) {
+        public void setImageUrlList(List<ImageUrlList> imageUrlList) {
             this.imageUrlList = imageUrlList;
         }
 
-        public static class ImageUrl {
-            private String url;
+        public long getImageCode() {
+            return imageCode;
+        }
 
-            public String getUrl() {
-                return url;
-            }
-
-            public void setUrl(String url) {
-                this.url = url;
-            }
+        public void setImageCode(long imageCode) {
+            this.imageCode = imageCode;
         }
     }
+
+    public static class ImageUrlList {
+        private String imageUrl;
+        private String imagePath;
+
+        // Getter and Setter
+        public String getImageUrl() {
+            return imageUrl;
+        }
+
+        public void setImageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+        }
+
+        public String getImagePath() {
+            return imagePath;
+        }
+
+        public void setImagePath(String imagePath) {
+            this.imagePath = imagePath;
+        }
+    }
+
 }
