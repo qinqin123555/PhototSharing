@@ -1,3 +1,4 @@
+/*
 package com.example.phototsharing.activity;
 
 import android.os.Bundle;
@@ -185,3 +186,4 @@ public class PublishActivity extends AppCompatActivity implements UploadFragment
 
 
 }
+*/
