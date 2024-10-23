@@ -98,16 +98,9 @@ public class MyRequest {
                 jsonObject.toString() // 使用 jsonObject 而不是 requestBody
         );
 
-        // 打印请求地址
-        Log.d("MyRequest", "请求地址: https://api-store.openguet.cn/api/member/photo/user/register");
-
         // 打印请求参数
         Log.d("MyRequest", "请求参数: " + jsonObject.toString());
 
-        // 打印请求头
-        Log.d("MyRequest", "Request Header: ");
-        Log.d("MyRequest", "Accept: application/json, text/plain, */*");
-        Log.d("MyRequest", "Content-Type: application/json");
         Log.d("MyRequest", "appId: " + MyHeaders.getAppId());
         Log.d("MyRequest", "appSecret: " + MyHeaders.getAppSecret());
 
@@ -124,8 +117,14 @@ public class MyRequest {
             public void onResponse(@NonNull Call<RegisterBean> call, @NonNull Response<RegisterBean> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     if (response.body().getCode() == 200) {
+                        // 打印成功的响应
+                        Log.d("MyRequest", "注册成功，返回数据: " + response.body().toString());
                         callback.onSuccess(response.body());
                     } else {
+                        // 打印错误信息
+                        Log.d("MyRequest", "注册失败，错误码: " + response.code());
+                        Log.d("MyRequest", "错误信息: " + response.message());
+                        Log.d("MyRequest", "错误信息: " + response.body().getMsg());
                         callback.onFailure(new Throwable("注册失败: " + response.body().getMsg()));
                     }
                 } else {
