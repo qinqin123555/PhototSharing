@@ -30,6 +30,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+
+
 }
 
 dependencies {
@@ -46,6 +52,8 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.google.android.material:material:latest_version")
+    implementation("io.github.lucksiege:pictureselector:v3.10.6")
+    implementation("com.lwkandroid.library:NineGridView:2.1.0")
 
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -54,4 +62,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+
 }

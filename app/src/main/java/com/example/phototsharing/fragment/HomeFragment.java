@@ -106,14 +106,15 @@ public class HomeFragment extends Fragment {
         HomeFocusFragment homeFocusFragment = HomeFocusFragment.newInstance(myUserId,myUserName);
         HomeFindFragment homeFindFragment = HomeFindFragment.newInstance(myUserName,myUserId);
         HomeCollectFragment homeCollectFragment = HomeCollectFragment.newInstance(myUserId,myUserName);
+        homeFragmentList.add(homeFindFragment);
         homeFragmentList.add(homeFocusFragment);
         homeFragmentList.add(homeLikeFragment);
         homeFragmentList.add(homeCollectFragment);
-        homeFragmentList.add(homeFindFragment);
+        homeItemTitles.add("发现");
         homeItemTitles.add("关注");
         homeItemTitles.add("喜欢");
         homeItemTitles.add("收藏");
-        homeItemTitles.add("发现");
+
 
     }
 }

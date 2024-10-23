@@ -1,0 +1,27 @@
+[33m2fe5473[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m HEAD@{0}: commit: 个人中心
+[33m76090e9[m HEAD@{1}: pull --no-stat -v --progress origin master: Fast-forward
+[33mc65e361[m HEAD@{2}: commit: 个人中心
+[33m460a3db[m HEAD@{3}: pull --no-stat -v --progress origin master: Merge made by the 'ort' strategy.
+[33mb12f5bb[m HEAD@{4}: commit: 注册
+[33mb52a58f[m HEAD@{5}: pull origin master: Merge made by the 'ort' strategy.
+[33m26d8500[m HEAD@{6}: commit: Initial commit
+[33m9a9c8e7[m HEAD@{7}: commit: Initial commit
+[33m53d3d00[m HEAD@{8}: pull --no-stat -v --progress origin master: Fast-forward
+[33mdcb381d[m HEAD@{9}: commit (merge): Initial commit
+[33m57501f6[m HEAD@{10}: commit: Initial commit
+[33m261c542[m HEAD@{11}: commit: Initial commit
+[33m33b8667[m HEAD@{12}: commit: Initial commit
+[33m60b3a62[m HEAD@{13}: checkout: moving from home to master
+[33m9615ae1[m[33m ([m[1;31morigin/home[m[33m, [m[1;32mhome[m[33m)[m HEAD@{14}: checkout: moving from master to home
+[33m60b3a62[m HEAD@{15}: checkout: moving from home to master
+[33m9615ae1[m[33m ([m[1;31morigin/home[m[33m, [m[1;32mhome[m[33m)[m HEAD@{16}: checkout: moving from master to home
+[33m60b3a62[m HEAD@{17}: checkout: moving from home to master
+[33m9615ae1[m[33m ([m[1;31morigin/home[m[33m, [m[1;32mhome[m[33m)[m HEAD@{18}: checkout: moving from master to home
+[33m60b3a62[m HEAD@{19}: checkout: moving from home to master
+[33m9615ae1[m[33m ([m[1;31morigin/home[m[33m, [m[1;32mhome[m[33m)[m HEAD@{20}: checkout: moving from master to home
+[33m60b3a62[m HEAD@{21}: commit: Initial commit
+[33m74716f6[m HEAD@{22}: checkout: moving from home to master
+[33m9615ae1[m[33m ([m[1;31morigin/home[m[33m, [m[1;32mhome[m[33m)[m HEAD@{23}: checkout: moving from master to home
+[33m74716f6[m HEAD@{24}: commit: Initial commit
+[33med2a8c9[m HEAD@{25}: commit: Initial commit
+[33m0a62665[m[33m ([m[1;31mgithub/master[m[33m)[m HEAD@{26}: commit (initial): Initial commit

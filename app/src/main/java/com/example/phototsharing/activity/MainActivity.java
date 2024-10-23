@@ -2,7 +2,6 @@ package com.example.phototsharing.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,12 +18,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.MyFragmentAdapter;
 import com.example.phototsharing.entity.PersonBean;
+import com.example.phototsharing.fragment.AddShareFragment;
 import com.example.phototsharing.fragment.HomeFragment;
 import com.example.phototsharing.fragment.PersonalCenterFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +35,7 @@ public class MainActivity extends FragmentActivity {
     private List<Fragment> myFragmentList;
     private long myUserId;
     private String myUserName;
+    private int follow;
 
     @SuppressLint({"MissingInflatedId", "ClickableViewAccessibility"})
     @Override
@@ -54,6 +54,7 @@ public class MainActivity extends FragmentActivity {
         if (receivedBundle != null) {
             myUserId = receivedBundle.getLong("myUserId");
             myUserName = receivedBundle.getString("myUserName");
+            follow = receivedBundle.getInt("total");
         }
 
         myViewPager = findViewById(R.id.viewpager);
@@ -113,10 +114,16 @@ public class MainActivity extends FragmentActivity {
         myFragmentList = new ArrayList<>();
         HomeFragment homeFragment = HomeFragment.newInstance("首页",myUserName,myUserId);
         myFragmentList.add(homeFragment);
-        HomeFragment fineFragment = HomeFragment.newInstance("发现",myUserName,myUserId);
-        PersonalCenterFragment mineFragment = PersonalCenterFragment.newInstance("我的",myUserName,myUserId);
+
+        //AddShareFragment fineFragment = AddShareFragment.newInstance("发现",myUserName,myUserId);
+
+        AddShareFragment fineFragment = AddShareFragment.newInstance("发布",myUserName,myUserId);
         myFragmentList.add(fineFragment);
+
+        PersonalCenterFragment mineFragment = PersonalCenterFragment.newInstance("我的",myUserName,myUserId,follow);
+        //myFragmentList.add(fineFragment);
         myFragmentList.add(mineFragment);
 
     }
+
 }
