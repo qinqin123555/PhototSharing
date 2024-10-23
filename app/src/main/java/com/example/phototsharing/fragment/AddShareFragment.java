@@ -1,13 +1,18 @@
 package com.example.phototsharing.fragment;
 
-import android.Manifest;
+//import manifests.AndroidManifest;
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 
+import com.example.phototsharing.activity.DraftsActivity;
 import com.example.phototsharing.activity.MainActivity;
 import com.example.phototsharing.entity.Image;
+
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.NetworkOnMainThreadException;
@@ -18,6 +23,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,12 +38,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-//import com.example.phototsharing.MyInfo.EditMyInfo;
 import com.example.phototsharing.R;
 import com.example.phototsharing.adapter.ImageAdapter;
-import com.example.phototsharing.entity.AddLikeBean;
 import com.example.phototsharing.entity.ImageBean;
-import com.example.phototsharing.entity.PersonBean;
 import com.example.phototsharing.entity.Share;
 import com.example.phototsharing.net.ApiInterface;
 import com.example.phototsharing.net.MyHeaders;
@@ -63,7 +66,6 @@ import java.util.Map;
 import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.Callback;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -71,9 +73,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-//import retrofit2.Call;
-//import retrofit2.Callback;
-//import retrofit2.Response;
 
 public class AddShareFragment extends Fragment {
 
@@ -98,8 +97,8 @@ public class AddShareFragment extends Fragment {
     private String imageCode;  // 保存选中的图片路径
     private PublishRepository publishRepository;
 
-
     ImageAdapter adapter;
+
     //返回上传图片的唯一标识码
     private Callback imgCodeCallback = new Callback() {
         @Override
@@ -125,7 +124,6 @@ public class AddShareFragment extends Fragment {
                 }else {
                     addShare("save");
                 }
-
 
             } else {
                 Log.d("error", response.toString());
@@ -165,18 +163,52 @@ public class AddShareFragment extends Fragment {
                             Toast.makeText(getActivity(), "发布成功", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getActivity(),MainActivity.class);
                         }else{
-                            Toast.makeText(getActivity(), "存入草稿箱", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getActivity(),MainActivity.class);
+//                            Toast.makeText(getActivity(), "存入草稿箱", Toast.LENGTH_SHORT).show();
+//                            Intent intent = new Intent(getActivity(),MainActivity.class);
                         }
-
                     }
-
                 }
             });
         }
-
-
     };
+
+    //底部弹窗,操作图片
+    private void showBottomDialog(int position){
+        //1、使用Dialog、设置style
+        final Dialog dialog = new Dialog(getContext());
+        //2、设置布局
+        View view = View.inflate(getContext(),R.layout.dialog_delete,null);
+        dialog.setContentView(view);
+
+        Window window = dialog.getWindow();
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        //设置弹出位置
+        window.setGravity(Gravity.BOTTOM);
+        //设置对话框大小
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.getDecorView().setBackgroundColor(Color.WHITE);
+        dialog.show();
+
+        dialog.findViewById(R.id.tv_delete).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageUris.remove(position);
+                imgFile.remove(position-1);
+                adapter = new ImageAdapter(getContext(), imageUris);
+                updateGridViwHeight();
+                gridView.setAdapter(adapter);
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
 
 
 
@@ -203,11 +235,10 @@ public class AddShareFragment extends Fragment {
         publishRepository = new PublishRepository(getContext());
         imageBean = new ImageBean(); // 初始化 ImageBean
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // 替换这里的布局为你的Fragment布局
         return inflater.inflate(R.layout.activity_publish, container, false);
-
     }
 
     @Nullable
@@ -217,32 +248,26 @@ public class AddShareFragment extends Fragment {
         Uri localUri = Uri.parse("android.resource://com.example.phototsharing/" + R.drawable.add_pic_logo);
         imageUris.add(localUri);
 
-       content = view.findViewById(R.id.text);
+        content = view.findViewById(R.id.text);
         title = view.findViewById(R.id.title);
         submitButton = view.findViewById(R.id.submit_button);
         saveDraftButton = view.findViewById(R.id.draft_button);
-        gridView = view.findViewById(R.id.gridview); // 上传图片的 ImageView
+        gridView = view.findViewById(R.id.gridview); // 上传图片的
 
         //点击发布按钮
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//
                 agrs = "add";
-                upload();
-//                if (imgFile.size() == 0){
-//                    ToastTool toastTool = new ToastTool();
-//                    toastTool.MyToast("请添加图片!",getContext(),getActivity().findViewById(R.id.toast_container), Gravity.TOP,0,-100);
-//                }else if (shareInfo.getContent() == null) {
-//                    ToastTool toastTool = new ToastTool();
-//                    toastTool.MyToast("请填写标题!",getContext(),getActivity().findViewById(R.id.toast_container), Gravity.TOP,0,-100);
-//                }else if (shareInfo.getTitle() == null) {
-//                    ToastTool toastTool = new ToastTool();
-//                    toastTool.MyToast("请填写内容!",getContext(),getActivity().findViewById(R.id.toast_container), Gravity.TOP,0,-100);
-//                }else {
-//                    upload();
-//                }
-
-
+                if (imgFile.size() == 0) {
+                    Toast.makeText(getContext(), "请添加图片!", Toast.LENGTH_SHORT).show();
+                } else if ((content.getText().toString()).isEmpty()) {
+                    Toast.makeText(getContext(), "请填写内容!", Toast.LENGTH_SHORT).show();
+                } else if ((title.getText().toString()).isEmpty()) {
+                    Toast.makeText(getContext(), "请填写标题!", Toast.LENGTH_SHORT).show();
+                } else {
+                    upload();
+                }
             }
         });
 
@@ -252,6 +277,10 @@ public class AddShareFragment extends Fragment {
             public void onClick(View view) {
                 agrs="save";
                 upload();
+                Toast.makeText(getContext(), "草稿保存成功", Toast.LENGTH_SHORT).show();
+                // 保存成功后可以导航到草稿页面
+                Intent intent = new Intent(getContext(), DraftsActivity.class);
+                startActivity(intent);
             }
         });
         // 假设你有一个从本地获取的 URI 列表
@@ -265,20 +294,30 @@ public class AddShareFragment extends Fragment {
                     // 如果点击了第一个位置（加号图标），执行添加图片的逻辑
                     addImg();
                 }else {
-
                 }
             }
         });
 
-    }
+        // 点击草稿箱按钮并设置跳转 DraftsActivity 的点击事件
+        Button draftButton = view.findViewById(R.id.draft);
+        draftButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 使用 Intent 跳转到 DraftsActivity
+                Intent intent = new Intent(getContext(), DraftsActivity.class);
+                startActivity(intent);
+                agrs = "change";
+            }
+        });
 
-    private static final int REQUEST_PERMISSION_READ_EXTERNAL_STORAGE = 1;
+    }
 
     //定义回调接口
     public interface UploadCallback {
         void onSuccess(ResponseBody imageBean);
         void onFailure(Throwable t);
     }
+
     //上传接口
     private void upload(){
         Log.d("upload","upload");
@@ -329,6 +368,7 @@ public class AddShareFragment extends Fragment {
             };
         }).start();;
     }
+
     //发布接口
     private void addShare(String way){
         new Thread(() -> {
@@ -344,7 +384,6 @@ public class AddShareFragment extends Fragment {
             } else if (way.equals("save")) {
                 url = "https://api-store.openguet.cn/api/member/photo/share/save";
             }
-
 
             // 请求头
             Headers headers = new Headers.Builder()
@@ -379,49 +418,6 @@ public class AddShareFragment extends Fragment {
         }).start();
     }
 
-
-//    private void uploadImage(String content ,String title, UploadCallback callback) {
-//        ApiInterface myApi = MyRequest.request();
-//
-////        // 创建描述的 RequestBody
-////        RequestBody descriptionBody = RequestBody.create(MediaType.parse("text/plain"), file);
-////
-////        // 创建文件的 RequestBody
-////        RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
-//
-//        // 使用 MultipartBody.Part 封装文件
-//        List<MultipartBody.Part> fileParts = new ArrayList<>();
-//        for (File file : imgFile) {
-//            RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), file);
-//            MultipartBody.Part filePart = MultipartBody.Part.createFormData("files", file.getName(), fileBody);
-//            fileParts.add(filePart);
-//        }
-//
-//// 调用接口上传多个文件
-//        Call<ResponseBody> call = myApi.uploadImage(
-//                MyHeaders.getAppId(),
-//                MyHeaders.getAppSecret(),
-//                fileParts
-//        );
-//
-//        // 执行异步请求
-//        call.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    callback.onSuccess(response.body());
-//                } else {
-//                    callback.onFailure(new Throwable("HTTP错误: " + response.code()));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-//                callback.onFailure(t);
-//            }
-//        });
-//    }
-
     // 打开系统相册选择图片
     private void addImg() {
         Intent intent = new Intent(Intent.ACTION_PICK);
@@ -434,7 +430,7 @@ public class AddShareFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_PERMISSION_READ_EXTERNAL_STORAGE) {
+        if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // 权限被授予，打开相册
                 addImg();
@@ -482,33 +478,17 @@ public class AddShareFragment extends Fragment {
         }
     }
 
-        private File createTempFile(InputStream inputStream) throws IOException {
-            File tempFile = File.createTempFile("temp_image", ".jpg", getActivity().getCacheDir());
-            OutputStream outputStream = new FileOutputStream(tempFile);
-            byte[] buffer = new byte[1024];
-            int read;
-            while ((read = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, read);
-            }
-            outputStream.close();
-            return tempFile;
+    private File createTempFile(InputStream inputStream) throws IOException {
+        File tempFile = File.createTempFile("temp_image", ".jpg", getActivity().getCacheDir());
+        OutputStream outputStream = new FileOutputStream(tempFile);
+        byte[] buffer = new byte[1024];
+        int read;
+        while ((read = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, read);
         }
-
-//    private void handleUpload(File file, String description) {
-//        uploadImage(file, description, new UploadCallback() {
-//            @Override
-//            public void onSuccess(ResponseBody imageBean) {
-//                // 处理成功上传后的逻辑
-//                Toast.makeText(getContext(), "图片上传成功", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//                // 处理上传失败的逻辑
-//                Toast.makeText(getContext(), "上传失败: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+        outputStream.close();
+        return tempFile;
+    }
 
     public interface PublishCallback {
         void onSuccess(String message);
@@ -518,143 +498,47 @@ public class AddShareFragment extends Fragment {
     private OkHttpClient client = new OkHttpClient(); // 初始化 OkHttpClient
     private Gson gson = new Gson(); // 初始化 Gson
 
-   /* private void sendRequest(String url, Map<String, Object> bodyMap, PublishCallback callback) {
-        String json = gson.toJson(bodyMap);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+    // 保存草稿
+    private void saveDraft(String title, String content, String imageCode, long userId, PublishCallback callback) {
+        try {
+            // 这里可以使用 SharedPreferences 或数据库保存草稿信息
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("drafts", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("title", title);
+            editor.putString("content", content);
+            editor.putString("imageCode", imageCode);
+            editor.putLong("userId", userId);
+            editor.apply(); // 异步保存草稿
 
-        Request request = new Request.Builder()
-                .url(url)
-                .headers(MyHeaders.getHeaders())
-                .post(requestBody)
-                .build();
+            // 保存成功时调用回调
+            callback.onSuccess("草稿保存成功");
+        } catch (Exception e) {
+            // 如果保存时发生异常，调用错误回调
+            callback.onError(e.getMessage());
+        }
+    }
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess("操作成功");
-                } else {
-                    callback.onError("操作失败: " + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call call, Throwable t) {
-                callback.onError("请求失败: " + e.getMessage());
-
-            }
-        });
-    }*/
-
-//    // 发布内容
-//    private void publishContent(String title, String content, String imageCode, long userId, PublishCallback callback) {
-//
-//        ApiInterface myApi = MyRequest.request();
-//
-//
-//        retrofit2.Call<AddLikeBean> call = myApi.publishContent(
-//                MyHeaders.getAppId(),
-//                MyHeaders.getAppSecret(),
-//                title,
-//                content,
-//                imageCode,
-//                userId
-//        );
-//
-//        call.enqueue(new Callback<AddLikeBean>() {
-//            @Override
-//            public void onResponse(Call<AddLikeBean> call, Response<AddLikeBean> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    // 检查返回的代码
-//                    if (response.body().getCode() == 200) {
-//                        callback.onSuccess(String.valueOf(response.body()));
-//                    } else {
-//                    }
-//                } else {
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<AddLikeBean> call, Throwable t) {
-//
-//            }
-//        });
-//
-//
-//
-//       /* if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content)) {
-//            callback.onError("标题或内容不能为空");
-//            return;
-//        }
-//
-//        Map<String, Object> bodyMap = new HashMap<>();
-//        bodyMap.put("title", title);
-//        bodyMap.put("content", content);
-//        bodyMap.put("imageCode", imageCode);
-//        bodyMap.put("pUserId", userId);
-//
-//        sendRequest(URLS.ADD_SHARE.getUrl(), bodyMap, callback);*/
-//    }
-
-//    // 发布按钮点击事件
-//    private void onPublishButtonClick() {
+    // 保存草稿按钮点击事件
+//    private void onSaveDraftButtonClick() {
 //        long userId = this.userId; // 用户ID
 //        String imageCode = this.imageCode; // 获取图片代码
 //
-//        publishContent(title.getText().toString(), content.getText().toString(), imageCode, userId, new PublishCallback() {
+//        saveDraft(title.getText().toString(), content.getText().toString(), imageCode, userId, new PublishCallback() {
 //            @Override
 //            public void onSuccess(String message) {
-//                Toast.makeText(getContext(), "发布成功", Toast.LENGTH_SHORT).show();
-//                // 发布成功后可以导航到个人中心
-//                navigateToFragment(new PersonalCenterFragment(), R.id.fragment_personal_center);
+//                Toast.makeText(getContext(), "草稿保存成功", Toast.LENGTH_SHORT).show();
+//                // 保存成功后可以导航到草稿页面
+//                Intent intent = new Intent(getContext(), DraftsActivity.class);
+//                startActivity(intent);
 //            }
 //
 //            @Override
 //            public void onError(String errorMessage) {
-//                Toast.makeText(getContext(), "发布失败: " + errorMessage, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "草稿保存失败: " + errorMessage, Toast.LENGTH_SHORT).show();
 //            }
 //        });
 //    }
 
-    // 保存草稿
-    private void saveDraft(String title, String content, String imageCode, long userId, PublishCallback callback) {
-       /* if (TextUtils.isEmpty(title) || TextUtils.isEmpty(content)) {
-            callback.onError("标题或内容不能为空");
-            return;
-        }
-
-        Map<String, Object> bodyMap = new HashMap<>();
-        bodyMap.put("title", title);
-        bodyMap.put("content", content);
-        bodyMap.put("imageCode", imageCode);
-        bodyMap.put("pUserId", userId);
-
-        sendRequest(URLS.SAVE.getUrl(), bodyMap, callback);*/
-    }
-
-    // 保存草稿按钮点击事件
-    private void onSaveDraftButtonClick() {
-        long userId = this.userId; // 用户ID
-        String imageCode = this.imageCode; // 获取图片代码
-
-        saveDraft(title.getText().toString(), content.getText().toString(), imageCode, userId, new PublishCallback() {
-            @Override
-            public void onSuccess(String message) {
-                Toast.makeText(getContext(), "草稿保存成功", Toast.LENGTH_SHORT).show();
-                // 保存成功后可以导航到草稿页面
-                navigateToFragment(new DraftsFragment(), R.id.activity_drafts);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                Toast.makeText(getContext(), "草稿保存失败: " + errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     // gridview自适应高度
     public void updateGridViwHeight(){
         int col = 4;// gridView.getNumColumns();
@@ -670,7 +554,6 @@ public class AddShareFragment extends Fragment {
             Log.d("height", String.valueOf(totalHeight));
         }
 
-
         // 获取gridView的布局参数
         ViewGroup.LayoutParams params = gridView.getLayoutParams();
         // 设置高度
@@ -678,21 +561,6 @@ public class AddShareFragment extends Fragment {
         // 设置参数
         gridView.setLayoutParams(params);
     }
-
-
-
-    private void navigateToFragment(Fragment fragment, int containerId) {
-        if (getActivity() != null) {
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(containerId, fragment)
-                    .addToBackStack(null)
-                    .commit();
-        }
-    }
-
-
-
 
 }
 
