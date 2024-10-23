@@ -14,6 +14,7 @@ import com.example.phototsharing.entity.ShareDetailBean;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -219,8 +220,8 @@ public interface ApiInterface {
     Call<ResponseBody> uploadImage(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
-            @Part MultipartBody.Part file
-    );
+            @Part List<MultipartBody.Part> fileList
+            );
 
     //更新(将保存状态变更为发布状态)
     @POST("api/member/photo/share/add")

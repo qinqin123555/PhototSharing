@@ -54,17 +54,17 @@ public class DraftAdapter extends BaseAdapter {
         ImageBean draft = (ImageBean) getItem(position);
 
         // 设置标题和正文，假设使用 ImageBean 的 msg 字段作为标题
-        titleView.setText(draft.getMsg());
-        if (draft.getData() != null && !draft.getData().getImageUrlList().isEmpty()) {
-            // 获取第一张图片的 URL
-            String imageUrl = draft.getData().getImageUrlList().get(0);  // 直接使用字符串
-            Glide.with(context)
-                    .load(imageUrl)  // 直接加载 URL 字符串
-                    .into(imageView);
-        } else {
-            // 如果没有图片，设置默认图片或隐藏 ImageView
-            imageView.setImageResource(R.drawable.default_image);
-        }
+//        titleView.setText(draft.getMsg());
+//        if (draft.getData() != null && !draft.getData().getImageUrlList().isEmpty()) {
+//            // 获取第一张图片的 URL
+//            String imageUrl = draft.getData().getImageUrlList().get(0);  // 直接使用字符串
+//            Glide.with(context)
+//                    .load(imageUrl)  // 直接加载 URL 字符串
+//                    .into(imageView);
+//        } else {
+//            // 如果没有图片，设置默认图片或隐藏 ImageView
+//            imageView.setImageResource(R.drawable.default_image);
+//        }
 
         return convertView;
     }
