@@ -64,6 +64,4 @@ public enum URLS {
         return url;
     }
 
-    public static final String UPLOAD_URL = "https://api-store.openguet.cn/detail/info?detailId=101&appId=1401";
-
 }

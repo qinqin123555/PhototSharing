@@ -32,11 +32,7 @@ public class UploadFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_upload, container, false);
 
         uploadImageView = view.findViewById(R.id.custom_image);
-        uploadImageView.setOnClickListener(v -> {
-            // 启动上传图片逻辑
-            Toast.makeText(getContext(), "上传图片功能", Toast.LENGTH_SHORT).show();
-        });
-
+        uploadImageView.setOnClickListener(v -> openImagePicker());
         return view;
     }
 
@@ -65,9 +61,10 @@ public class UploadFragment extends Fragment {
 
     private void selectImage(String imagePath) {
         if (mListener != null) {
-            mListener.onImageSelected(imagePath);
+            mListener.onImageSelected(imagePath);  // 调用传递图片路径的方法
         }
     }
+
 
     @Override
     public void onDetach() {

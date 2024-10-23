@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- 左侧部分：包含两个 TextView -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="105dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- 草稿标题 -->
+
+        <!-- 草稿正文 -->
+        <TextView
+            android:id="@+id/draft_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/draft_content"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="8dp"
+            android:text="Content"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <!-- 右侧部分：ImageView -->
+    <ImageView
+        android:id="@+id/draft_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_default_image"
+        android:scaleType="centerCrop" />
+</LinearLayout>

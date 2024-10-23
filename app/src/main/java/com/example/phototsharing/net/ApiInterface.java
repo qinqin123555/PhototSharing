@@ -12,8 +12,12 @@ import com.example.phototsharing.entity.RegisterBean;
 import com.example.phototsharing.entity.ShareBean;
 import com.example.phototsharing.entity.ShareDetailBean;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -24,6 +28,8 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
+
+import retrofit2.http.*;
 
 public interface ApiInterface {
 
@@ -206,14 +212,39 @@ public interface ApiInterface {
             @Query("likeId") long likeId
     );
 
-    // 上传图片接口
+    //上传文件
+    @FormUrlEncoded
     @Multipart
-    @POST("api/member/photo/upload")
-    Call<ImageBean> uploadImage(
+    @POST("api/member/photo/image/upload")
+    Call<ResponseBody> uploadImage(
             @Header("appId") String appId,
             @Header("appSecret") String appSecret,
-            @Part MultipartBody.Part file,
-            @Part("description") RequestBody description
+            @Part MultipartBody.Part file
     );
+
+    //更新(将保存状态变更为发布状态)
+    @POST("api/member/photo/share/add")
+    @FormUrlEncoded
+    Call<AddLikeBean> publishContent(
+            @Header("appId") String appId,
+            @Header("appSecret") String appSecret,
+            @Field("title") String title,
+            @Field("content") String content,
+            @Field("image") String imageCode,
+            @Field("userId") long userId
+    );
+
+    //保存图文分享
+    @POST("api/member/photo/share/save")
+    @FormUrlEncoded
+    Call<ResponseBody> saveDraft(
+            @Header("appId") String appId,
+            @Header("appSecret") String appSecret,
+            @Field("title") String title,
+            @Field("content") String content,
+            @Field("image") String imageCode,
+            @Field("userId") long userId
+    );
+
 
 }

@@ -149,10 +149,9 @@ public class MyRequest {
     }
 
 
-
-    public static  void getShareBeanData(long userId,GetShareBeanCallback callback) {
+    public static void getShareBeanData(long userId, GetShareBeanCallback callback) {
         ApiInterface myApiInterface = MyRequest.request();
-        Call<ShareBean> call = myApiInterface.getFindInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),1,100,userId);
+        Call<ShareBean> call = myApiInterface.getFindInfo(MyHeaders.getAppId(), MyHeaders.getAppSecret(), 1, 100, userId);
         call.enqueue(new Callback<ShareBean>() {
             @Override
             public void onResponse(@NonNull Call<ShareBean> call, @NonNull Response<ShareBean> response) {
@@ -188,8 +187,8 @@ public class MyRequest {
                 if (response.isSuccessful()) {
                     ShareDetailBean shareDetailBean = response.body();
                     if (shareDetailBean != null) {
-                        Log.d("msg",shareDetailBean.getMsg());
-                        if (shareDetailBean.getData()!= null){
+                        Log.d("msg", shareDetailBean.getMsg());
+                        if (shareDetailBean.getData() != null) {
                             callback.onSuccess(shareDetailBean);
                         }
                     } else {
@@ -233,6 +232,7 @@ public class MyRequest {
                     callback.onFailure(new Exception("HTTP error: " + response.code()));
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<CommentBean> call, @NonNull Throwable t) {
                 // 网络请求本身失败
@@ -240,7 +240,6 @@ public class MyRequest {
             }
         });
     }
-
 
 
     //    获取二级评论
@@ -272,10 +271,10 @@ public class MyRequest {
     }
 
 
-//    通过用户名字获取用户信息
-    public static void getUserByName(String username, GetUserInfoCallback callback){
+    //    通过用户名字获取用户信息
+    public static void getUserByName(String username, GetUserInfoCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<PersonBean> call = myApi.getUserByName(MyHeaders.getAppId(),MyHeaders.getAppSecret(),username);
+        Call<PersonBean> call = myApi.getUserByName(MyHeaders.getAppId(), MyHeaders.getAppSecret(), username);
         call.enqueue(new Callback<PersonBean>() {
             @Override
             public void onResponse(@NonNull Call<PersonBean> call, @NonNull Response<PersonBean> response) {
@@ -297,8 +296,8 @@ public class MyRequest {
         });
     }
 
-//    新增一条一级评论
-    public static void addFirstComment(Context context,String content, long shareId, long userId, String userName,TrueOrFalseCallback callback) {
+    //    新增一条一级评论
+    public static void addFirstComment(Context context, String content, long shareId, long userId, String userName, TrueOrFalseCallback callback) {
         ApiInterface myApi = MyRequest.request();
         Call<AddCommentBean> call = myApi.setFirstComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(), content, shareId, userId, userName);
         call.enqueue(new Callback<AddCommentBean>() {
@@ -308,15 +307,16 @@ public class MyRequest {
                     if (response.body().getCode() == 200) {
                         callback.onSuccess(true);
                     } else {
-                        callback.onFailure(new Throwable("code = "+String.valueOf(response.body().getCode())+response.body().getMsg()));
-                        Toast.makeText(context,"评论失败",Toast.LENGTH_SHORT).show();
+                        callback.onFailure(new Throwable("code = " + String.valueOf(response.body().getCode()) + response.body().getMsg()));
+                        Toast.makeText(context, "评论失败", Toast.LENGTH_SHORT).show();
 
                     }
                 } else {
                     callback.onFailure(new Throwable("response失败"));
-                    Toast.makeText(context,"评论失败",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "评论失败", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<AddCommentBean> call, @NonNull Throwable t) {
                 callback.onFailure(t);
@@ -326,11 +326,11 @@ public class MyRequest {
 
 
     //    新增一条二级评论
-    public static void addSecondComment (String content,long parentCommentId,long parentCommentUserId,long replyCommentId,long replyCommentUserId,long shareId,long userId,String userName,TrueOrFalseCallback callback) {
+    public static void addSecondComment(String content, long parentCommentId, long parentCommentUserId, long replyCommentId, long replyCommentUserId, long shareId, long userId, String userName, TrueOrFalseCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<AddCommentBean> call = myApi.setSecondComment(MyHeaders.getAppId(),MyHeaders.getAppSecret(),
-                        content,parentCommentId,parentCommentUserId, replyCommentId,
-                replyCommentUserId,shareId,userId,userName);
+        Call<AddCommentBean> call = myApi.setSecondComment(MyHeaders.getAppId(), MyHeaders.getAppSecret(),
+                content, parentCommentId, parentCommentUserId, replyCommentId,
+                replyCommentUserId, shareId, userId, userName);
         call.enqueue(new Callback<AddCommentBean>() {
             @Override
             public void onResponse(@NonNull Call<AddCommentBean> call, @NonNull Response<AddCommentBean> response) {
@@ -352,10 +352,10 @@ public class MyRequest {
         });
     }
 
-//   获取当前登录用户的已关注列表
-    public static void getFocusInfo(long current,long size,long userId, GetFocusBeanCallback callback) {
+    //   获取当前登录用户的已关注列表
+    public static void getFocusInfo(long current, long size, long userId, GetFocusBeanCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<HasFocusBean> call = myApi.getFocusInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),current,size,userId);
+        Call<HasFocusBean> call = myApi.getFocusInfo(MyHeaders.getAppId(), MyHeaders.getAppSecret(), current, size, userId);
         call.enqueue(new Callback<HasFocusBean>() {
             @Override
             public void onResponse(@NonNull Call<HasFocusBean> call, @NonNull Response<HasFocusBean> response) {
@@ -377,12 +377,12 @@ public class MyRequest {
     //    添加关注的网络请求
     public static void setFocusRequest(long focusUserId, long userId, TrueOrFalseCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<AddFocusBean> call = myApi.addFocus(MyHeaders.getAppId(),MyHeaders.getAppSecret(),focusUserId,userId);
+        Call<AddFocusBean> call = myApi.addFocus(MyHeaders.getAppId(), MyHeaders.getAppSecret(), focusUserId, userId);
         call.enqueue(new Callback<AddFocusBean>() {
             @Override
             public void onResponse(@NonNull Call<AddFocusBean> call, @NonNull Response<AddFocusBean> response) {
                 if (response.isSuccessful()) {
-                    if (response.body()!= null && response.body().getCode() == 200) {
+                    if (response.body() != null && response.body().getCode() == 200) {
 //
                         callback.onSuccess(true);
                     } else {
@@ -408,12 +408,12 @@ public class MyRequest {
     //    取消关注的网络请求
     public static void chancelFocusRequest(long focusUserId, long userId, TrueOrFalseCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<AddFocusBean> call = myApi.cancelFocus(MyHeaders.getAppId(),MyHeaders.getAppSecret(),focusUserId,userId);
+        Call<AddFocusBean> call = myApi.cancelFocus(MyHeaders.getAppId(), MyHeaders.getAppSecret(), focusUserId, userId);
         call.enqueue(new Callback<AddFocusBean>() {
             @Override
             public void onResponse(@NonNull Call<AddFocusBean> call, @NonNull Response<AddFocusBean> response) {
                 if (response.isSuccessful()) {
-                    if (response.body()!= null && response.body().getCode() == 200) {
+                    if (response.body() != null && response.body().getCode() == 200) {
                         callback.onSuccess(false);
                     } else {
                         callback.onFailure(new Throwable("无法取消关注"));
@@ -423,6 +423,7 @@ public class MyRequest {
 
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<AddFocusBean> call, @NonNull Throwable t) {
                 callback.onFailure(new Throwable("无法取消关注"));
@@ -432,9 +433,9 @@ public class MyRequest {
 
 
     //   获取当前登录用户的已关注列表
-    public static void getLikeInfo(long current,long size,long userId, GetFocusBeanCallback callback) {
+    public static void getLikeInfo(long current, long size, long userId, GetFocusBeanCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<HasFocusBean> call = myApi.getLikeInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),current,size,userId);
+        Call<HasFocusBean> call = myApi.getLikeInfo(MyHeaders.getAppId(), MyHeaders.getAppSecret(), current, size, userId);
         call.enqueue(new Callback<HasFocusBean>() {
             @Override
             public void onResponse(@NonNull Call<HasFocusBean> call, @NonNull Response<HasFocusBean> response) {
@@ -453,10 +454,10 @@ public class MyRequest {
 
     }
 
-//       添加点赞的网络请求
-    public static void setLikeRequest(long shareId, long userId,TrueOrFalseCallback callback){
+    //       添加点赞的网络请求
+    public static void setLikeRequest(long shareId, long userId, TrueOrFalseCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<AddLikeBean> call = myApi.setLikeInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),shareId,userId);
+        Call<AddLikeBean> call = myApi.setLikeInfo(MyHeaders.getAppId(), MyHeaders.getAppSecret(), shareId, userId);
         call.enqueue(new Callback<AddLikeBean>() {
             @Override
             public void onResponse(@NonNull Call<AddLikeBean> call, @NonNull Response<AddLikeBean> response) {
@@ -472,6 +473,7 @@ public class MyRequest {
 
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<AddLikeBean> call, @NonNull Throwable t) {
                 callback.onFailure(new Throwable("无法点赞"));
@@ -480,13 +482,13 @@ public class MyRequest {
     }
 
     //    取消点赞的网络请求
-    public static void cancelLikeRequest(long shareId, long userId, TrueOrFalseCallback callback){
-        MyRequest.getShareDetailData(shareId, userId,new ShareDetailCallback() {
+    public static void cancelLikeRequest(long shareId, long userId, TrueOrFalseCallback callback) {
+        MyRequest.getShareDetailData(shareId, userId, new ShareDetailCallback() {
             @Override
             public void onSuccess(ShareDetailBean shareDetailBean) {
                 long likeId = shareDetailBean.getData().getLikeId();
                 ApiInterface myApi = MyRequest.request();
-                Call<AddLikeBean> call = myApi.setLikeCancelInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),likeId);
+                Call<AddLikeBean> call = myApi.setLikeCancelInfo(MyHeaders.getAppId(), MyHeaders.getAppSecret(), likeId);
                 call.enqueue(new Callback<AddLikeBean>() {
                     @Override
                     public void onResponse(@NonNull Call<AddLikeBean> call, @NonNull Response<AddLikeBean> response) {
@@ -500,6 +502,7 @@ public class MyRequest {
                             callback.onFailure(new Throwable("无法取消点赞"));
                         }
                     }
+
                     @Override
                     public void onFailure(@NonNull Call<AddLikeBean> call, @NonNull Throwable t) {
                         callback.onFailure(new Throwable("无法取消点赞"));
@@ -514,10 +517,10 @@ public class MyRequest {
         });
     }
 
-//  获取当前登录用户已收藏列表
-    public static void getCollectInfo(long current,long size,long userId, GetFocusBeanCallback callback) {
+    //  获取当前登录用户已收藏列表
+    public static void getCollectInfo(long current, long size, long userId, GetFocusBeanCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<HasFocusBean> call = myApi.getCollectInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),current,size,userId);
+        Call<HasFocusBean> call = myApi.getCollectInfo(MyHeaders.getAppId(), MyHeaders.getAppSecret(), current, size, userId);
         call.enqueue(new Callback<HasFocusBean>() {
             @Override
             public void onResponse(@NonNull Call<HasFocusBean> call, @NonNull Response<HasFocusBean> response) {
@@ -537,9 +540,9 @@ public class MyRequest {
     }
 
     //    添加收藏的网络请求
-    public static void setCollectRequest(long shareId,long userId, TrueOrFalseCallback callback) {
+    public static void setCollectRequest(long shareId, long userId, TrueOrFalseCallback callback) {
         ApiInterface myApi = MyRequest.request();
-        Call<AddCollectBean> call = myApi.setCollectInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),shareId,userId);
+        Call<AddCollectBean> call = myApi.setCollectInfo(MyHeaders.getAppId(), MyHeaders.getAppSecret(), shareId, userId);
         call.enqueue(new Callback<AddCollectBean>() {
             @Override
             public void onResponse(@NonNull Call<AddCollectBean> call, @NonNull Response<AddCollectBean> response) {
@@ -554,6 +557,7 @@ public class MyRequest {
 
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<AddCollectBean> call, @NonNull Throwable t) {
                 callback.onFailure(new Throwable("无法加入收藏列表"));
@@ -561,16 +565,17 @@ public class MyRequest {
             }
         });
     }
+
     //    取消收藏的网络请求
-    public static void cancelCollectRequest(long shareId,long userId, TrueOrFalseCallback callback) {
+    public static void cancelCollectRequest(long shareId, long userId, TrueOrFalseCallback callback) {
 
 //        网络请求单个分享详情，获得collectId,再进行取消收藏的请求
-        MyRequest.getShareDetailData(shareId, userId,new ShareDetailCallback() {
+        MyRequest.getShareDetailData(shareId, userId, new ShareDetailCallback() {
             @Override
             public void onSuccess(ShareDetailBean shareDetailBean) {
                 long collectId = shareDetailBean.getData().getCollectId();
                 ApiInterface myApi = MyRequest.request();
-                Call<AddCollectBean> call = myApi.setCollectCancelInfo(MyHeaders.getAppId(),MyHeaders.getAppSecret(),collectId);
+                Call<AddCollectBean> call = myApi.setCollectCancelInfo(MyHeaders.getAppId(), MyHeaders.getAppSecret(), collectId);
                 call.enqueue(new Callback<AddCollectBean>() {
                     @Override
                     public void onResponse(@NonNull Call<AddCollectBean> call, @NonNull Response<AddCollectBean> response) {
@@ -584,73 +589,19 @@ public class MyRequest {
                             callback.onFailure(new Throwable("无法取消加入收藏列表"));
                         }
                     }
+
                     @Override
                     public void onFailure(@NonNull Call<AddCollectBean> call, @NonNull Throwable t) {
                         callback.onFailure(new Throwable("无法取消加入收藏列表"));
                     }
                 });
             }
+
             @Override
             public void onFailure(Throwable throwable) {
                 callback.onFailure(new Throwable("无法取消加入收藏列表"));
             }
         });
     }
-
-
-    public static void uploadImage(File file, String description, UploadCallback callback) {
-        ApiInterface myApi = MyRequest.request();
-
-        // 创建描述的 RequestBody
-        RequestBody descriptionBody = RequestBody.create(description, MediaType.parse("text/plain"));
-
-        // 创建文件的 RequestBody
-        RequestBody fileBody = RequestBody.create(file, MediaType.parse("image/jpeg"));
-
-        // 使用 MultipartBody.Part 封装文件
-        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", file.getName(), fileBody);
-
-        // 打印请求地址
-        Log.d("MyRequest", "请求地址: https://api-store.openguet.cn/api/member/photo/upload");
-
-        // 打印请求参数
-        Log.d("MyRequest", "请求参数: 文件名 = " + file.getName() + ", 描述 = " + description);
-
-        // 打印请求头
-        Log.d("MyRequest", "Request Header: ");
-        Log.d("MyRequest", "appId: " + MyHeaders.getAppId());
-        Log.d("MyRequest", "appSecret: " + MyHeaders.getAppSecret());
-
-        // 调用接口上传图片
-        Call<ImageBean> call = myApi.uploadImage(
-                MyHeaders.getAppId(),
-                MyHeaders.getAppSecret(),
-                filePart,
-                descriptionBody
-        );
-
-        // 执行异步请求
-        call.enqueue(new Callback<ImageBean>() {
-            @Override
-            public void onResponse(@NonNull Call<ImageBean> call, @NonNull Response<ImageBean> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    if (response.body().getCode() == 200) {
-                        callback.onSuccess(response.body());
-                    } else {
-                        callback.onFailure(new Throwable("上传失败: " + response.body().getMsg()));
-                    }
-                } else {
-                    callback.onFailure(new Throwable("HTTP错误: " + response.code()));
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<ImageBean> call, @NonNull Throwable t) {
-                callback.onFailure(t);
-            }
-        });
-    }
-
-
 
 }
