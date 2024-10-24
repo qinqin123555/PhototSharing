@@ -44,7 +44,6 @@ public class DraftAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
-        // 使用新定义的 item_draft 布局文件
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_draft, parent, false);
             holder = new ViewHolder();
@@ -62,12 +61,19 @@ public class DraftAdapter extends BaseAdapter {
         holder.titleView.setText(draft.getMsg());
         holder.contentView.setText(draft.getMsg());
 
-        // 绑定图片，如果存在图片 URL 则加载图片
-        if (draft.getData() != null && !draft.getData().getImageUrlList().isEmpty()) {
-            String imageUrl = draft.getData().getImageUrlList().get(0); // 获取第一个图片 URL
+        // 绑定图片，优先使用直接设置的 imageUrlList，如果为空则再使用 Data 中的图片
+        List<String> imageUrlList = draft.getImageUrlList();
+        if (imageUrlList != null && !imageUrlList.isEmpty()) {
+            String imageUrl = imageUrlList.get(0); // 获取第一个图片 URL
             Glide.with(context)
                     .load(imageUrl)
                     .placeholder(R.drawable.ic_default_image) // 设置默认图片占位符
+                    .into(holder.imageView);
+        } else if (draft.getData() != null && !draft.getData().getImageUrlList().isEmpty()) {
+            String imageUrl = draft.getData().getImageUrlList().get(0); // 获取 Data 对象中的第一个图片 URL
+            Glide.with(context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.ic_default_image)
                     .into(holder.imageView);
         } else {
             holder.imageView.setImageResource(R.drawable.ic_default_image); // 没有图片时使用默认图片
@@ -75,6 +81,7 @@ public class DraftAdapter extends BaseAdapter {
 
         return convertView;
     }
+
 
 
     // ViewHolder 模式优化性能

@@ -260,11 +260,11 @@ public class AddShareFragment extends Fragment {
             public void onClick(View v) {//
                 agrs = "add";
                 if (imgFile.size() == 0) {
-                    Toast.makeText(getContext(), "请添加图片!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "请添加图片!", Toast.LENGTH_LONG).show();
                 } else if ((content.getText().toString()).isEmpty()) {
-                    Toast.makeText(getContext(), "请填写内容!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "请填写内容!", Toast.LENGTH_LONG).show();
                 } else if ((title.getText().toString()).isEmpty()) {
-                    Toast.makeText(getContext(), "请填写标题!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "请填写标题!", Toast.LENGTH_LONG).show();
                 } else {
                     upload();
                 }
@@ -436,7 +436,7 @@ public class AddShareFragment extends Fragment {
                 addImg();
             } else {
                 // 权限被拒绝，给出提示
-                Toast.makeText(getContext(), "需要读取存储权限以选择图片", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "需要读取存储权限以选择图片", Toast.LENGTH_LONG).show();
             }
         }
     }
